@@ -1,0 +1,693 @@
+table DIM_DATE
+	lineageTag: 280dd4f4-0ebf-4f5c-8ff0-1a676f693de6
+
+	measure 'MAX Selected Dates' = MAX(DIM_DATE[DATE_ACTUAL])
+		formatString: General Date
+		displayFolder: Dates selector
+		lineageTag: 59c97a67-305f-4d81-8f60-fb4525b84058
+
+	measure 'PM MAX Selected Dates' =
+			
+			CALCULATE([MAX Selected Dates], DATEADD(DIM_DATE[DATE_ACTUAL],-1,MONTH))
+		formatString: General Date
+		displayFolder: Dates selector
+		lineageTag: 5ec64064-c39e-4ccc-9a2f-a724e53cb393
+
+	measure 'MIN Selected Dates' = MIN(DIM_DATE[DATE_ACTUAL])
+		formatString: General Date
+		displayFolder: Dates selector
+		lineageTag: 9f8a97aa-e317-4a36-8376-a3de441b71bf
+
+	measure 'PY MIN Selected Dates' = CALCULATE([MIN Selected Dates], SAMEPERIODLASTYEAR(DIM_DATE[DATE_ACTUAL]))
+		formatString: General Date
+		displayFolder: Dates selector
+		lineageTag: e30136d0-ef75-4c25-aaea-5251a01e275a
+
+	measure 'PM MIN Selected Dates' = CALCULATE([MIN Selected Dates], DATEADD(DIM_DATE[DATE_ACTUAL],-1,MONTH))
+		formatString: General Date
+		displayFolder: Dates selector
+		lineageTag: 5e2af091-8adb-4ced-8557-7247e3c5ab48
+
+	measure 'Selected Date Custom' = ```
+			
+			    "Current period: "
+			    & [MIN Selected Dates]
+			    & " - "
+			    & [MAX Selected Dates]
+			    & UNICHAR(10)
+			    & "Comparison period: "
+			    & [MIN Selected Dates (2)]
+			    & " - "
+			    & [MAX Selected Dates (2)]
+			
+			```
+		displayFolder: Dates selector
+		lineageTag: 8a0b2783-e476-443f-a2a2-848c690c6489
+
+	measure Today = TODAY()
+		formatString: General Date
+		lineageTag: fb54c99f-2685-4608-b378-5854e1581f20
+
+	measure 'Selected Dates' =
+			
+			SWITCH(TRUE(),
+			"Prior year" IN ALLSELECTED('Measure Selection Time Comparison'[Measure Selection]),[Selected Date PY],
+			"Prior month" IN ALLSELECTED('Measure Selection Time Comparison'[Measure Selection]),[Selected Date PM],
+			"Custom" IN ALLSELECTED('Measure Selection Time Comparison'[Measure Selection]),[Selected Date Custom],
+			"Year to date" IN ALLSELECTED('Measure Selection Time Comparison'[Measure Selection]),[Year to Date],
+			"Budget" IN ALLSELECTED('Measure Selection Time Comparison'[Measure Selection]),[Selected Date Budget])
+		lineageTag: 98b872fb-0b65-43e5-a3ec-e697ec75cfea
+
+	measure 'Year to Date' = ```
+			
+			    "Year to date: "
+			    & [MIN Selected Dates]
+			    & " - "
+			    & [MAX Calendar Month]
+			    & UNICHAR(10)
+			    & "Year to date PY: "
+			    & [PY MIN Selected Dates]
+			    & " - "
+			    & [MAX Calendar Month PY]
+			
+			```
+		displayFolder: Dates selector
+		lineageTag: a714ed2a-23ae-4c5c-928d-6bbbc3b79b7c
+
+	measure 'Start Year' = DATE(YEAR(DIM_DATE[Today]),1,1)
+		formatString: General Date
+		displayFolder: Dates selector
+		lineageTag: 32a79815-be4b-4e17-b1a5-e16d91877bd8
+
+	measure 'Start Year PY' = DATE(YEAR(DIM_DATE[Today])-1,1,1)
+		formatString: General Date
+		displayFolder: Dates selector
+		lineageTag: 4c97e8d9-b9a2-4c50-8be0-5105ed7802ed
+
+	measure 'MAX Calendar Month' =
+			
+			CALCULATE(
+			     MAX(GOLD_FINANCE_METRICS[CALENDAR_MONTH]),
+			     REMOVEFILTERS())
+		formatString: General Date
+		displayFolder: Dates selector
+		lineageTag: d3ac8cf1-dcac-4ff7-8c72-db46be1d1f08
+
+	measure 'MAX Calendar Month PY' =
+			
+			DATE(
+			    YEAR(DIM_DATE[Today])-1,
+			    MONTH([MAX Calendar Month]),
+			    DAY([MAX Calendar Month]))
+		formatString: General Date
+		displayFolder: Dates selector
+		lineageTag: 09f2a8d7-ba49-4641-a417-7c41a5d85c2e
+
+	measure 'Selected Date PM' = ```
+			
+			    "Current period: "
+			    & [MIN Selected Dates]
+			    & " - "
+			    & [MAX Selected Dates]
+			    & UNICHAR(10)
+			    & "Prior month: "
+			    & [PM MIN Selected Dates]
+			    & " - "
+			    & [PM MAX Selected Dates]
+			```
+		displayFolder: Dates selector
+		lineageTag: 8fcb16da-6045-43c5-beea-3975406896d7
+
+	measure 'Selected Date Budget' = ```
+			
+			    "Current period: "
+			    & [MIN Selected Dates]
+			    & " - "
+			    & [MAX Selected Dates]
+			
+			```
+		displayFolder: Dates selector
+		lineageTag: 0d606ba7-6692-4313-ba64-23ac91f09c9d
+
+	measure 'PY MAX Selected Dates' =
+			
+			
+			DATE(
+			    YEAR([MAX Selected Dates])-1,
+			    MONTH([MAX Selected Dates]),
+			    DAY([MAX Selected Dates]))
+		formatString: General Date
+		displayFolder: Dates selector
+		lineageTag: 96332c86-06ff-462c-81bd-10e0009526b5
+
+	measure 'Selected Date PY' = ```
+			
+			    "Current period: "
+			    & [MIN Selected Dates]
+			    & " - "
+			    & [MAX Selected Dates]
+			    & UNICHAR(10)
+			    & "Prior year: "
+			    & [PY MIN Selected Dates]
+			    & " - "
+			    & [PY MAX Selected Dates]
+			
+			```
+		displayFolder: Dates selector
+		lineageTag: 2ed7be52-3ec2-4d15-99ad-948d7b6d49c1
+
+	measure 'Period Year Custom' = YEAR([MAX Selected Dates (2)])-YEAR([MAX Selected Dates])
+		formatString: 0
+		displayFolder: Dates selector
+		lineageTag: 964c7344-ad54-4fbb-aa70-ae4bfa2d0afc
+
+	measure 'MAX Calendar Month + Month' =
+			
+			DATE(
+			    YEAR([MAX Calendar Month]),
+			    MONTH([MAX Calendar Month])+1,
+			    DAY([MAX Calendar Month]))
+			    -1
+		formatString: General Date
+		lineageTag: 7be86cbb-c518-4174-8313-684dd5406dd5
+
+	measure 'MIN Calendar Month' =
+			
+			CALCULATE(
+			     MIN(GOLD_FINANCE_METRICS[CALENDAR_MONTH]),
+			     REMOVEFILTERS())
+		formatString: General Date
+		displayFolder: Dates selector
+		lineageTag: 7c03d2f6-9712-4d53-9265-fa87be67ef0f
+
+	column DATE_ACTUAL
+		dataType: dateTime
+		formatString: Long Date
+		sourceProviderType: date
+		lineageTag: 077180b4-c23e-4428-bf5a-bfe4e50e513f
+		summarizeBy: none
+		sourceColumn: DATE_ACTUAL
+
+		variation Variation
+			isDefault
+			relationship: f2dc7902-fbb2-4341-8311-6f1e4fb4e3b6
+			defaultHierarchy: LocalDateTable_6a0c3061-63c5-460d-9487-8f9eb06c6164.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column DAY_NAME
+		dataType: string
+		isHidden
+		sourceProviderType: nvarchar(16777216)
+		lineageTag: cd4eb8cb-e553-4d74-85c3-50714544af51
+		summarizeBy: none
+		sourceColumn: DAY_NAME
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column MONTH_ACTUAL
+		dataType: double
+		sourceProviderType: decimal(2, 0)
+		lineageTag: cab38a74-7edd-4ba0-a121-5b71e8a6e505
+		summarizeBy: sum
+		sourceColumn: MONTH_ACTUAL
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column QUARTER_ACTUAL
+		dataType: double
+		sourceProviderType: decimal(2, 0)
+		lineageTag: 99c30317-5407-4f28-95c5-cd689473cdfb
+		summarizeBy: sum
+		sourceColumn: QUARTER_ACTUAL
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column YEAR_ACTUAL
+		dataType: double
+		formatString: 0
+		sourceProviderType: decimal(4, 0)
+		lineageTag: 9891b482-f613-4496-a421-6dfbcf09945f
+		summarizeBy: sum
+		sourceColumn: YEAR_ACTUAL
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isDecimal":true}
+
+	column YEAR_ISO
+		dataType: double
+		sourceProviderType: decimal(5, 0)
+		lineageTag: 3de8d4a3-e0a5-49b9-af90-df7b4c5d30bb
+		summarizeBy: sum
+		sourceColumn: YEAR_ISO
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column YEAR_PMA
+		dataType: double
+		sourceProviderType: decimal(38, 0)
+		lineageTag: ce4497a1-83eb-4fa5-898f-37686a14f742
+		summarizeBy: sum
+		sourceColumn: YEAR_PMA
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column DAY_OF_WEEK
+		dataType: double
+		sourceProviderType: decimal(2, 0)
+		lineageTag: a5fea948-2486-4d5b-be5c-20cd6b1cc01a
+		summarizeBy: sum
+		sourceColumn: DAY_OF_WEEK
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column PMA_DAY_OF_WEEK
+		dataType: double
+		sourceProviderType: decimal(3, 0)
+		lineageTag: 83a57653-e326-4994-87d8-a0d5dd3e5b4f
+		summarizeBy: sum
+		sourceColumn: PMA_DAY_OF_WEEK
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column DAY_OF_MONTH
+		dataType: double
+		isHidden
+		sourceProviderType: decimal(2, 0)
+		lineageTag: f37c339d-8f8e-4ce1-9805-202b6b09b769
+		summarizeBy: sum
+		sourceColumn: DAY_OF_MONTH
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column DAY_OF_QUARTER
+		dataType: double
+		isHidden
+		sourceProviderType: decimal(10, 0)
+		lineageTag: 81988cd4-69e9-433a-9194-af825a20d3b0
+		summarizeBy: sum
+		sourceColumn: DAY_OF_QUARTER
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column DAY_OF_YEAR
+		dataType: double
+		sourceProviderType: decimal(4, 0)
+		lineageTag: d5173a90-8424-4b94-8056-fc25d3e7f8ca
+		summarizeBy: sum
+		sourceColumn: DAY_OF_YEAR
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column WEEK_OF_MONTH
+		dataType: double
+		sourceProviderType: decimal(9, 0)
+		lineageTag: 37e3839d-a8fd-41a8-bdba-74beb823f56e
+		summarizeBy: sum
+		sourceColumn: WEEK_OF_MONTH
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column WEEK_OF_YEAR
+		dataType: double
+		sourceProviderType: decimal(2, 0)
+		lineageTag: f12b5454-c4f4-48e2-805c-68b2d14c81ef
+		summarizeBy: sum
+		sourceColumn: WEEK_OF_YEAR
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column PMA_WEEK
+		dataType: double
+		sourceProviderType: decimal(17, 0)
+		lineageTag: 3ba01adc-51f1-4d8f-b6d9-c3738b21a490
+		summarizeBy: sum
+		sourceColumn: PMA_WEEK
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column DAYS_IN_MONTH
+		dataType: double
+		sourceProviderType: decimal(2, 0)
+		lineageTag: 15757dd4-9a97-4daa-a096-52157a711b7b
+		summarizeBy: sum
+		sourceColumn: DAYS_IN_MONTH
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column DAY_NAME_SHORT
+		dataType: string
+		isHidden
+		sourceProviderType: nvarchar(3)
+		lineageTag: 9f5d1739-9a0a-4e0b-8daa-b695e5c0aebb
+		summarizeBy: none
+		sourceColumn: DAY_NAME_SHORT
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column MONTH_NAME
+		dataType: string
+		sourceProviderType: nvarchar(16777216)
+		lineageTag: 4f19d42b-6d62-428e-b041-e0283a3f1b88
+		summarizeBy: none
+		sourceColumn: MONTH_NAME
+		sortByColumn: MONTH_ACTUAL
+
+		changedProperty = SortByColumn
+
+		annotation SummarizationSetBy = Automatic
+
+	column MONTH_NAME_SHORT
+		dataType: string
+		sourceProviderType: nvarchar(3)
+		lineageTag: a26d4d06-bb7a-4096-9840-78d14db9881a
+		summarizeBy: none
+		sourceColumn: MONTH_NAME_SHORT
+
+		annotation SummarizationSetBy = Automatic
+
+	column YEAR_MONTH_NAME_SHORT
+		dataType: string
+		sourceProviderType: nvarchar(16777216)
+		lineageTag: 3062607f-1cc1-47b8-80e9-116ce06dd22e
+		summarizeBy: none
+		sourceColumn: YEAR_MONTH_NAME_SHORT
+		sortByColumn: MONTH_ACTUAL
+
+		changedProperty = SortByColumn
+
+		annotation SummarizationSetBy = Automatic
+
+	column QUARTER_NAME
+		dataType: string
+		sourceProviderType: nvarchar(16777216)
+		lineageTag: 7b3b03b9-73d2-4b2a-a282-de2e57f17b72
+		summarizeBy: none
+		sourceColumn: QUARTER_NAME
+
+		annotation SummarizationSetBy = Automatic
+
+	column YEAR_WEEK_ISO
+		dataType: string
+		sourceProviderType: nvarchar(16777216)
+		lineageTag: 0117125f-fce0-4ec7-a028-4f59162b9d29
+		summarizeBy: none
+		sourceColumn: YEAR_WEEK_ISO
+
+		annotation SummarizationSetBy = Automatic
+
+	column YEAR_WEEK_PMA
+		dataType: string
+		sourceProviderType: nvarchar(16777216)
+		lineageTag: 70c1dfd3-637d-480c-9bbf-b857021afceb
+		summarizeBy: none
+		sourceColumn: YEAR_WEEK_PMA
+
+		annotation SummarizationSetBy = Automatic
+
+	column YEAR_WEEK_DOW_ISO
+		dataType: string
+		sourceProviderType: nvarchar(16777216)
+		lineageTag: 59068a88-8c24-483b-b540-568453ed218e
+		summarizeBy: none
+		sourceColumn: YEAR_WEEK_DOW_ISO
+
+		annotation SummarizationSetBy = Automatic
+
+	column YEAR_WEEK_DOW_PMA
+		dataType: string
+		sourceProviderType: nvarchar(16777216)
+		lineageTag: e9809929-0a21-4cc4-9dee-16b4ab27f3ac
+		summarizeBy: none
+		sourceColumn: YEAR_WEEK_DOW_PMA
+
+		annotation SummarizationSetBy = Automatic
+
+	column YEAR_MONTH_ACTUAL
+		dataType: string
+		sourceProviderType: nvarchar(16777216)
+		lineageTag: 6f2d5edd-1bf6-4653-bd62-43b38b9d9252
+		summarizeBy: none
+		sourceColumn: YEAR_MONTH_ACTUAL
+
+		annotation SummarizationSetBy = Automatic
+
+	column YEAR_MONTH_ACCOUNTING
+		dataType: string
+		sourceProviderType: nvarchar(16777216)
+		lineageTag: 6ee53328-fc42-4f98-86cb-b2cb5f6564eb
+		summarizeBy: none
+		sourceColumn: YEAR_MONTH_ACCOUNTING
+
+		annotation SummarizationSetBy = Automatic
+
+	column WEEK_START_DATE
+		dataType: dateTime
+		formatString: Long Date
+		sourceProviderType: date
+		lineageTag: e7cb8a27-be39-4799-8971-ba8b3ba2ee3f
+		summarizeBy: none
+		sourceColumn: WEEK_START_DATE
+
+		variation Variation
+			isDefault
+			relationship: fb190b09-a477-4f7f-bac2-806e85492d67
+			defaultHierarchy: LocalDateTable_7fae8859-b517-402d-a159-e200843122e9.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column WEEK_END_DATE
+		dataType: dateTime
+		formatString: Long Date
+		sourceProviderType: date
+		lineageTag: 62f9e9ea-1559-4cec-804f-b2c1be15a73e
+		summarizeBy: none
+		sourceColumn: WEEK_END_DATE
+
+		variation Variation
+			isDefault
+			relationship: 1580ea9d-34e9-455f-ab0f-21f91a8481a5
+			defaultHierarchy: LocalDateTable_331f2f97-8d84-4629-979e-82b511d86345.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column MONTH_START_DATE
+		dataType: dateTime
+		formatString: Long Date
+		sourceProviderType: date
+		lineageTag: 34ac346c-497a-4ba4-a10e-cf76de759891
+		summarizeBy: none
+		sourceColumn: MONTH_START_DATE
+
+		variation Variation
+			isDefault
+			relationship: 9832728a-5e1f-4503-b1e0-ed0da7a9aa94
+			defaultHierarchy: LocalDateTable_ecfb6839-dedd-4b19-b874-a8f401e0d89c.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column MONTH_END_DATE
+		dataType: dateTime
+		formatString: Long Date
+		sourceProviderType: date
+		lineageTag: 4e0fe20f-aad9-4f83-a96e-b96535950d1b
+		summarizeBy: none
+		sourceColumn: MONTH_END_DATE
+
+		variation Variation
+			isDefault
+			relationship: 256bee9c-6866-4c5f-9d3f-1213a88b78d8
+			defaultHierarchy: LocalDateTable_af5ecd02-8d34-4d34-a431-46f3471ba3ab.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column QUARTER_START_DATE
+		dataType: dateTime
+		formatString: Long Date
+		sourceProviderType: date
+		lineageTag: 6cdda47b-de1d-483a-a316-4064af79904e
+		summarizeBy: none
+		sourceColumn: QUARTER_START_DATE
+
+		variation Variation
+			isDefault
+			relationship: c373c13c-3e14-4439-abe6-c60570868ab0
+			defaultHierarchy: LocalDateTable_91bff17f-0a54-4aa6-913c-24eadd2e2443.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column QUARTER_END_DATE
+		dataType: dateTime
+		formatString: Long Date
+		sourceProviderType: date
+		lineageTag: d0bbe2d0-c109-457e-b994-1a3833c39a17
+		summarizeBy: none
+		sourceColumn: QUARTER_END_DATE
+
+		variation Variation
+			isDefault
+			relationship: d471094f-5865-4bcd-b3e4-46f9103887f0
+			defaultHierarchy: LocalDateTable_bd379015-6422-4b25-9494-eb5100cb8764.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column YEAR_START_DATE
+		dataType: dateTime
+		formatString: Long Date
+		sourceProviderType: date
+		lineageTag: 27ea0e5e-5b01-417d-85a8-85ee82443cbd
+		summarizeBy: none
+		sourceColumn: YEAR_START_DATE
+
+		variation Variation
+			isDefault
+			relationship: fe608d5f-af21-456a-b69e-b1374a3ca375
+			defaultHierarchy: LocalDateTable_657bc0ee-76dd-4a95-a848-0c378a3a1e08.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column YEAR_END_DATE
+		dataType: dateTime
+		formatString: Long Date
+		sourceProviderType: date
+		lineageTag: ceb1fcd7-5f24-499a-91df-c46ed182eebd
+		summarizeBy: none
+		sourceColumn: YEAR_END_DATE
+
+		variation Variation
+			isDefault
+			relationship: 7e5dcb92-a6f0-447a-a1f4-d7e8c8ef82ca
+			defaultHierarchy: LocalDateTable_624cc17c-f93c-46d3-a4a3-6c73829b1ba8.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'Year Month'
+		dataType: string
+		lineageTag: bd034934-8d9f-42ee-9922-d71d16dd32ac
+		summarizeBy: none
+		sourceColumn: Year Month
+		sortByColumn: YEAR_MONTH_ACTUAL
+
+		changedProperty = SortByColumn
+
+		annotation SummarizationSetBy = Automatic
+
+	column DATE_KEY
+		dataType: double
+		isHidden
+		sourceProviderType: decimal(38, 0)
+		lineageTag: 278586ed-49c0-440b-895f-c84c41e102fe
+		summarizeBy: sum
+		sourceColumn: DATE_KEY
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column MONTH_NAME_SHORT_YEAR
+		dataType: string
+		sourceProviderType: nvarchar(16777216)
+		lineageTag: 04cedd5a-d854-473e-b302-a0c241a6396d
+		summarizeBy: none
+		sourceColumn: MONTH_NAME_SHORT_YEAR
+		sortByColumn: MONTH_ACTUAL
+
+		changedProperty = SortByColumn
+
+		annotation SummarizationSetBy = Automatic
+
+	column Column
+		type: calculated
+		displayFolder: Dates selector
+		lineageTag: ae7f7791-fc41-4d2d-b1ab-164e25505971
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation 43dbc3e8-3a1c-4b6f-9923-b49ff7d6691c = True
+
+	column 'FILTER COLUMN' =
+			
+			
+			IF(
+			    DIM_DATE[DATE_ACTUAL]<([MAX Calendar Month + Month]+1) &&
+			    DIM_DATE[DATE_ACTUAL]>([MIN Calendar Month]),
+			    1,BLANK()
+			)
+		displayFolder: Dates selector
+		lineageTag: 0a967654-758e-42b3-bdd7-740684437432
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DIM_DATE = m
+		mode: import
+		source =
+				let
+				    Source = Snowflake.Databases("carrix.snowflakecomputing.com","PBI_WH",[Role="ANALYTICS_DEVELOPER"]),
+				    SILVER_Database = Source{[Name="SILVER",Kind="Database"]}[Data],
+				    UTILS_Schema = SILVER_Database{[Name="UTILS",Kind="Schema"]}[Data],
+				    DIM_DATE_Table = UTILS_Schema{[Name="DIM_DATE",Kind="Table"]}[Data],
+				    #"Inserted Merged Column" = Table.AddColumn(DIM_DATE_Table, "Year Month", each [MONTH_NAME_SHORT]&" "&Text.From([YEAR_ACTUAL]))
+				in
+				    #"Inserted Merged Column"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

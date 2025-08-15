@@ -1,0 +1,47 @@
+table GOLD_FINANCE_TERMINALS_RLS
+	lineageTag: 4f3119f9-6581-40de-ad20-91078367b85f
+
+	column EXECUTIVE_GROUP_HIERARCHY
+		dataType: string
+		lineageTag: 7fbfa40e-73b5-433c-ae68-74d136d4004a
+		summarizeBy: none
+		sourceColumn: EXECUTIVE_GROUP_HIERARCHY
+
+		annotation SummarizationSetBy = Automatic
+
+	column EXECUTIVE_RESPONSIBILITY
+		dataType: string
+		lineageTag: 1131d087-2aa2-418d-88bb-317afd976435
+		summarizeBy: none
+		sourceColumn: EXECUTIVE_RESPONSIBILITY
+
+		annotation SummarizationSetBy = Automatic
+
+	column ENTITY_ID
+		dataType: string
+		lineageTag: 1bbefe67-ba13-46c0-bc1f-beaff66d4614
+		summarizeBy: none
+		sourceColumn: ENTITY_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	partition GOLD_FINANCE_TERMINALS_RLS = m
+		mode: import
+		source =
+				let
+				    Source = Snowflake.Databases("carrix.snowflakecomputing.com","PBI_WH",[Role="ANALYTICS_DEVELOPER"]),
+				    GOLD_Database = Source{[Name="GOLD",Kind="Database"]}[Data],
+				    FINANCE_Schema = GOLD_Database{[Name="FINANCE",Kind="Schema"]}[Data],
+				    GOLD_FINANCE_METRICS_Table = FINANCE_Schema{[Name="GOLD_FINANCE_METRICS",Kind="Table"]}[Data],
+				    #"Removed Columns" = Table.RemoveColumns(GOLD_FINANCE_METRICS_Table,{"SILVER_METADATA"}),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Removed Columns",{{"CALENDAR_MONTH", type date}}),
+				    #"Filtered Rows" = Table.SelectRows(#"Changed Type", each ([HIERARCHY_TYPE] = "Banking")),
+				    #"Removed Other Columns" = Table.SelectColumns(#"Filtered Rows",{"EXECUTIVE_GROUP_HIERARCHY", "EXECUTIVE_RESPONSIBILITY", "ENTITY_ID"}),
+				    #"Removed Duplicates" = Table.Distinct(#"Removed Other Columns", {"EXECUTIVE_GROUP_HIERARCHY"})
+				in
+				    #"Removed Duplicates"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

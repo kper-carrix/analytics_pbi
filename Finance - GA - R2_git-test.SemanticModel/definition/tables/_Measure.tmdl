@@ -1,0 +1,395 @@
+table _Measure
+	lineageTag: d02e0f20-3099-4557-895c-943d4794f98a
+
+	measure 'DirectCost, Actual, Gross' = ```
+			
+			CALCULATE(
+			    SUM('GOLD_FINANCE_METRICS'[METRIC_VALUE]), 
+			    'GOLD_FINANCE_METRICS'[METRIC] = "Direct Costs",
+			    'GOLD_FINANCE_METRICS'[METRIC_GROUP]="Actual"
+			    )
+			```
+		displayFolder: Direct Cost
+		lineageTag: f097a95c-91ec-462f-8839-dc5a3816df76
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'DirectCost, Actual, Pro-Rata' = ```
+			
+			CALCULATE(
+			    SUM('GOLD_FINANCE_METRICS'[METRIC_VALUE]), 
+			    'GOLD_FINANCE_METRICS'[METRIC] = "Direct Costs",
+			    'GOLD_FINANCE_METRICS'[METRIC_GROUP]="Actual-Pro-Rata"
+			    )
+			```
+		displayFolder: Direct Cost
+		lineageTag: 505a1509-693e-413f-b752-cc6cc99bc90f
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'DirectCost, Budget, Gross' = ```
+			
+			CALCULATE(
+			    SUM('GOLD_FINANCE_METRICS'[METRIC_VALUE]), 
+			    'GOLD_FINANCE_METRICS'[METRIC] = "Direct Costs",
+			    'GOLD_FINANCE_METRICS'[METRIC_GROUP]="Budget"
+			    )
+			```
+		displayFolder: Direct Cost
+		lineageTag: d76787b2-be6b-4e1f-afd1-837aae41c41d
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'DirectCost, Budget, Pro-Rata' = ```
+			
+			CALCULATE(
+			    SUM('GOLD_FINANCE_METRICS'[METRIC_VALUE]), 
+			    'GOLD_FINANCE_METRICS'[METRIC] = "Direct Costs",
+			    'GOLD_FINANCE_METRICS'[METRIC_GROUP]="Budget-Pro-Rata"
+			    )
+			```
+		displayFolder: Direct Cost
+		lineageTag: 1c3cf54e-b24d-4452-8b52-3b4824064e43
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'EBITDA, Actual, Gross' = ```
+			
+			CALCULATE(
+			    SUM('GOLD_FINANCE_METRICS'[METRIC_VALUE]), 
+			    'GOLD_FINANCE_METRICS'[METRIC] = "EBITDA",
+			    'GOLD_FINANCE_METRICS'[METRIC_GROUP]="Actual"
+			    )
+			```
+		displayFolder: EBITDA
+		lineageTag: 3b62bcab-81ac-4600-a405-8bc20e3a2dbc
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'EBITDA, Actual, Pro-Rata' = ```
+			
+			CALCULATE(
+			    SUM('GOLD_FINANCE_METRICS'[METRIC_VALUE]), 
+			    'GOLD_FINANCE_METRICS'[METRIC] = "EBITDA",
+			    'GOLD_FINANCE_METRICS'[METRIC_GROUP]="Actual-Pro-Rata"
+			    )
+			```
+		displayFolder: EBITDA
+		lineageTag: 79ecae22-d992-4270-a3d1-8db5c6238c2a
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'EBITDA, Budget, Gross' = ```
+			
+			CALCULATE(
+			    SUM('GOLD_FINANCE_METRICS'[METRIC_VALUE]), 
+			    'GOLD_FINANCE_METRICS'[METRIC] = "Direct Costs",
+			    'GOLD_FINANCE_METRICS'[METRIC_GROUP]="Budget"
+			    )
+			```
+		displayFolder: EBITDA
+		lineageTag: 19b4d0bc-3f36-4d0b-89e7-77d26d455828
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'EBITDA, Budget, Pro-Rata' = ```
+			
+			CALCULATE(
+			    SUM('GOLD_FINANCE_METRICS'[METRIC_VALUE]), 
+			    'GOLD_FINANCE_METRICS'[METRIC] = "EBITDA",
+			    'GOLD_FINANCE_METRICS'[METRIC_GROUP]="Budget-Pro-Rata"
+			    )
+			```
+		displayFolder: EBITDA
+		lineageTag: 990a3d3b-d09b-40be-b1df-c5821664581f
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Volume, Actual, Gross' = ```
+			
+			CALCULATE(
+			    SUM('GOLD_FINANCE_METRICS'[METRIC_VALUE]), 
+			    'GOLD_FINANCE_METRICS'[METRIC_DOMAIN] = "Volume",
+			    'GOLD_FINANCE_METRICS'[METRIC_GROUP]="Actual"
+			    )
+			```
+		displayFolder: Volume
+		lineageTag: 0064b3da-3bf7-413b-99a1-d8b0872bb815
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Volume, Budget, Gross' = ```
+			
+			CALCULATE(
+			    SUM('GOLD_FINANCE_METRICS'[METRIC_VALUE]), 
+			    'GOLD_FINANCE_METRICS'[METRIC_DOMAIN] = "Volume",
+			    'GOLD_FINANCE_METRICS'[METRIC_GROUP]="Budget"
+			    )
+			```
+		displayFolder: Volume
+		lineageTag: e272b38f-1f34-4192-a2fd-f907edfd3293
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Volume, Autos, Budget, Gross' = ```
+			
+			CALCULATE(
+			    SUM('GOLD_FINANCE_METRICS'[METRIC_VALUE]), 
+			    'GOLD_FINANCE_METRICS'[METRIC_DOMAIN] = "Volume",
+			    'GOLD_FINANCE_METRICS'[METRIC] = "Autos",
+			    'GOLD_FINANCE_METRICS'[METRIC_GROUP]="Budget"
+			    )
+			```
+		displayFolder: Volume
+		lineageTag: ffbd20f2-bb2c-4b3d-a291-cc209944c1a2
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Volume, Autos, Actual, Gross' = ```
+			
+			CALCULATE(
+			    SUM('GOLD_FINANCE_METRICS'[METRIC_VALUE]), 
+			    'GOLD_FINANCE_METRICS'[METRIC_DOMAIN] = "Volume",
+			    'GOLD_FINANCE_METRICS'[METRIC] = "Autos",
+			    'GOLD_FINANCE_METRICS'[METRIC_GROUP]="Actual"
+			    )
+			```
+		displayFolder: Volume
+		lineageTag: 6629a560-edd6-46cc-9a4f-a592036d7701
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Volume, CFS, Budget, Gross' = ```
+			
+			CALCULATE(
+			    SUM('GOLD_FINANCE_METRICS'[METRIC_VALUE]), 
+			    'GOLD_FINANCE_METRICS'[METRIC_DOMAIN] = "Volume",
+			    'GOLD_FINANCE_METRICS'[METRIC] = "CFS",
+			    'GOLD_FINANCE_METRICS'[METRIC_GROUP]="Budget"
+			    )
+			```
+		displayFolder: Volume
+		lineageTag: 03f46451-81a6-4cb0-923a-e62fd22f8d02
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Volume, CFS, Actual, Gross' = ```
+			
+			CALCULATE(
+			    SUM('GOLD_FINANCE_METRICS'[METRIC_VALUE]), 
+			    'GOLD_FINANCE_METRICS'[METRIC_DOMAIN] = "Volume",
+			    'GOLD_FINANCE_METRICS'[METRIC] = "CFS",
+			    'GOLD_FINANCE_METRICS'[METRIC_GROUP]="Actual"
+			    )
+			```
+		displayFolder: Volume
+		lineageTag: ea48d49f-46d8-4459-b139-76e0dd2a43c1
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Volume, Container Moves, Actual, Gross' = ```
+			
+			CALCULATE(
+			    SUM('GOLD_FINANCE_METRICS'[METRIC_VALUE]), 
+			    'GOLD_FINANCE_METRICS'[METRIC_DOMAIN] = "Volume",
+			    'GOLD_FINANCE_METRICS'[METRIC] = "Container Moves",
+			    'GOLD_FINANCE_METRICS'[METRIC_GROUP]="Actual"
+			    )
+			```
+		displayFolder: Volume
+		lineageTag: ccfe9445-30b2-4175-9c85-2f513b25665a
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Volume, Container Moves, Budget, Gross' = ```
+			
+			CALCULATE(
+			    SUM('GOLD_FINANCE_METRICS'[METRIC_VALUE]), 
+			    'GOLD_FINANCE_METRICS'[METRIC_DOMAIN] = "Volume",
+			    'GOLD_FINANCE_METRICS'[METRIC] = "Container Moves",
+			    'GOLD_FINANCE_METRICS'[METRIC_GROUP]="Budget"
+			    )
+			```
+		displayFolder: Volume
+		lineageTag: 6a787b7e-630a-4655-9edf-5fdc233d7e4c
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Volume, Cruise Passenger, Actual, Gross' = ```
+			
+			CALCULATE(
+			    SUM('GOLD_FINANCE_METRICS'[METRIC_VALUE]), 
+			    'GOLD_FINANCE_METRICS'[METRIC_DOMAIN] = "Volume",
+			    'GOLD_FINANCE_METRICS'[METRIC] = "Cruise Passenger",
+			    'GOLD_FINANCE_METRICS'[METRIC_GROUP]="Actual"
+			    )
+			```
+		displayFolder: Volume
+		lineageTag: 023f90c4-cfbf-40f9-bbc7-ecddb28bc7a0
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Volume, Cruise Passenger, Budget, Gross' = ```
+			
+			CALCULATE(
+			    SUM('GOLD_FINANCE_METRICS'[METRIC_VALUE]), 
+			    'GOLD_FINANCE_METRICS'[METRIC_DOMAIN] = "Volume",
+			    'GOLD_FINANCE_METRICS'[METRIC] = "Cruise Passenger",
+			    'GOLD_FINANCE_METRICS'[METRIC_GROUP]="Budget"
+			    )
+			```
+		displayFolder: Volume
+		lineageTag: 715b3d3e-2a17-40e5-bfa4-d18ccac99891
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Volume, Rail Lifts, Budget, Gross' = ```
+			
+			CALCULATE(
+			    SUM('GOLD_FINANCE_METRICS'[METRIC_VALUE]), 
+			    'GOLD_FINANCE_METRICS'[METRIC_DOMAIN] = "Volume",
+			    'GOLD_FINANCE_METRICS'[METRIC] = "Rail Lifts",
+			    'GOLD_FINANCE_METRICS'[METRIC_GROUP]="Budget"
+			    )
+			```
+		displayFolder: Volume
+		lineageTag: aed0f1e5-c899-4e09-932c-b6ce895e9972
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Volume, Rail Lifts, Actual, Gross' = ```
+			
+			CALCULATE(
+			    SUM('GOLD_FINANCE_METRICS'[METRIC_VALUE]), 
+			    'GOLD_FINANCE_METRICS'[METRIC_DOMAIN] = "Volume",
+			    'GOLD_FINANCE_METRICS'[METRIC] = "Rail Lifts",
+			    'GOLD_FINANCE_METRICS'[METRIC_GROUP]="Actual"
+			    )
+			```
+		displayFolder: Volume
+		lineageTag: b002723d-5538-450b-8d2a-76787eaa491a
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Revenue, Actual, Gross' = ```
+			
+			CALCULATE(
+			    SUM('GOLD_FINANCE_METRICS'[METRIC_VALUE]), 
+			    'GOLD_FINANCE_METRICS'[METRIC] = "Revenue",
+			    'GOLD_FINANCE_METRICS'[METRIC_GROUP]="Actual"
+			    )
+			```
+		displayFolder: Revenue
+		lineageTag: d908a5a8-359a-4830-82ac-733fdb2362b9
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Revenue, Actual, Pro-Rata' = ```
+			
+			CALCULATE(
+			    SUM('GOLD_FINANCE_METRICS'[METRIC_VALUE]), 
+			    'GOLD_FINANCE_METRICS'[METRIC] = "Revenue",
+			    'GOLD_FINANCE_METRICS'[METRIC_GROUP]="Actual-Pro-Rata"
+			    )
+			```
+		displayFolder: Revenue
+		lineageTag: 9b4dd0a5-622f-4aca-be14-48c929407bda
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Revenue, Budget, Gross' = ```
+			
+			CALCULATE(
+			    SUM('GOLD_FINANCE_METRICS'[METRIC_VALUE]), 
+			    'GOLD_FINANCE_METRICS'[METRIC] = "Revenue",
+			    'GOLD_FINANCE_METRICS'[METRIC_GROUP]="Budget"
+			    )
+			```
+		displayFolder: Revenue
+		lineageTag: 1f34a7d0-fcab-481d-8e6f-9206a5dfb038
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Revenue, Budget, Pro-Rata' = ```
+			
+			CALCULATE(
+			    SUM('GOLD_FINANCE_METRICS'[METRIC_VALUE]), 
+			    'GOLD_FINANCE_METRICS'[METRIC] = "Revenue",
+			    'GOLD_FINANCE_METRICS'[METRIC_GROUP]="Budget-Pro-Rata"
+			    )
+			
+			```
+		displayFolder: Revenue
+		lineageTag: 47c49eb1-090e-4216-8811-0d26d4676a88
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'TotalCost, Actual, Gross' = ```
+			
+			CALCULATE(
+			    SUM('GOLD_FINANCE_METRICS'[METRIC_VALUE]), 
+			    'GOLD_FINANCE_METRICS'[METRIC] = "Total Costs",
+			    'GOLD_FINANCE_METRICS'[METRIC_GROUP]="Actual"
+			    )
+			```
+		displayFolder: Total Cost
+		lineageTag: 85f877e1-313e-404f-8e97-7a1f6d8f97ea
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'TotalCost, Actual, Pro-Rata' = ```
+			
+			CALCULATE(
+			    SUM('GOLD_FINANCE_METRICS'[METRIC_VALUE]), 
+			    'GOLD_FINANCE_METRICS'[METRIC] = "Total Costs",
+			    'GOLD_FINANCE_METRICS'[METRIC_GROUP]="Actual-Pro-Rata"
+			    )
+			```
+		displayFolder: Total Cost
+		lineageTag: b9d1de7a-9dba-40b2-bd1c-ea38aeac9beb
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'TotalCost, Budget, Gross' = ```
+			
+			CALCULATE(
+			    SUM('GOLD_FINANCE_METRICS'[METRIC_VALUE]), 
+			    'GOLD_FINANCE_METRICS'[METRIC] = "Total Costs",
+			    'GOLD_FINANCE_METRICS'[METRIC_GROUP]="Budget"
+			    )
+			```
+		displayFolder: Total Cost
+		lineageTag: f347f018-66fd-4f51-94d6-4e9437552026
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'TotalCost, Budget, Pro-Rata' = ```
+			
+			CALCULATE(
+			    SUM('GOLD_FINANCE_METRICS'[METRIC_VALUE]), 
+			    'GOLD_FINANCE_METRICS'[METRIC] = "Total Costs",
+			    'GOLD_FINANCE_METRICS'[METRIC_GROUP]="Budget-Pro-Rata")
+			```
+		displayFolder: Total Cost
+		lineageTag: 13d55e18-fdce-465e-89bb-f2bc32425c88
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Column
+		isHidden
+		formatString: 0
+		lineageTag: 76daf354-3677-47a2-b42e-e15ac0178158
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Column]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition _Measure = calculated
+		mode: import
+		source = Row("Column", BLANK())
+
+	annotation PBI_Id = e44b5134eab142e1a01bf9f6515a1f7f
+
+	annotation 436ba87b-9c83-4389-a31b-ebd06a36be98 = {"Expression":""}
+

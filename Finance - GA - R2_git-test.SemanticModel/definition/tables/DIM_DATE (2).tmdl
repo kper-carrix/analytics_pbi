@@ -1,0 +1,599 @@
+table 'DIM_DATE (2)'
+	isHidden
+	lineageTag: d86e1b2b-396a-49ea-a316-530a943bbe10
+
+	measure 'MAX Selected Dates (2)' = MAX('DIM_DATE (2)'[DATE_ACTUAL])
+		formatString: General Date
+		isHidden
+		displayFolder: Dates selector
+		lineageTag: 1764ffff-355d-49db-b29d-0875b5c1b5d1
+
+		changedProperty = IsHidden
+
+	measure 'MIN Selected Dates (2)' = MIN('DIM_DATE (2)'[DATE_ACTUAL])
+		formatString: General Date
+		isHidden
+		displayFolder: Dates selector
+		lineageTag: b43eeec2-3247-455c-9d70-a3ddfa1c03ad
+
+		changedProperty = IsHidden
+
+	column DATE_ACTUAL
+		dataType: dateTime
+		isHidden
+		formatString: Long Date
+		sourceProviderType: date
+		lineageTag: bb0690f2-3d07-45e4-b343-e7c6600ca502
+		summarizeBy: none
+		sourceColumn: DATE_ACTUAL
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column DAY_NAME
+		dataType: string
+		isHidden
+		sourceProviderType: nvarchar(16777216)
+		lineageTag: 0d8ef6e6-269b-4943-8d48-ee496ea12d8e
+		summarizeBy: none
+		sourceColumn: DAY_NAME
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column MONTH_ACTUAL
+		dataType: double
+		isHidden
+		sourceProviderType: decimal(2, 0)
+		lineageTag: eabfc33b-37af-4e16-879b-77713b57570e
+		summarizeBy: sum
+		sourceColumn: MONTH_ACTUAL
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column QUARTER_ACTUAL
+		dataType: double
+		isHidden
+		sourceProviderType: decimal(2, 0)
+		lineageTag: 33104938-2ee5-4e70-8252-8d6f8de3e987
+		summarizeBy: sum
+		sourceColumn: QUARTER_ACTUAL
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column YEAR_ACTUAL
+		dataType: double
+		isHidden
+		sourceProviderType: decimal(4, 0)
+		lineageTag: 8cc32865-ee7e-4491-b689-2602bb8f2910
+		summarizeBy: sum
+		sourceColumn: YEAR_ACTUAL
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column YEAR_ISO
+		dataType: double
+		isHidden
+		sourceProviderType: decimal(5, 0)
+		lineageTag: 863ae314-e5bc-454c-a893-8d06f17dd516
+		summarizeBy: sum
+		sourceColumn: YEAR_ISO
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column YEAR_PMA
+		dataType: double
+		isHidden
+		sourceProviderType: decimal(38, 0)
+		lineageTag: 23eae056-c2ce-4970-908b-cfb2006ba1c0
+		summarizeBy: sum
+		sourceColumn: YEAR_PMA
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column DAY_OF_WEEK
+		dataType: double
+		isHidden
+		sourceProviderType: decimal(2, 0)
+		lineageTag: 61a16da0-4ec6-4deb-b338-a02497e9201b
+		summarizeBy: sum
+		sourceColumn: DAY_OF_WEEK
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column PMA_DAY_OF_WEEK
+		dataType: double
+		isHidden
+		sourceProviderType: decimal(3, 0)
+		lineageTag: bccfb9cc-7e26-47d7-960f-6cbe1e550722
+		summarizeBy: sum
+		sourceColumn: PMA_DAY_OF_WEEK
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column DAY_OF_MONTH
+		dataType: double
+		isHidden
+		sourceProviderType: decimal(2, 0)
+		lineageTag: 07cf243c-a3b5-4cfa-a534-4515fd4c6547
+		summarizeBy: sum
+		sourceColumn: DAY_OF_MONTH
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column DAY_OF_QUARTER
+		dataType: double
+		isHidden
+		sourceProviderType: decimal(10, 0)
+		lineageTag: 867fbb79-429e-4df7-8521-bff51ca17bfd
+		summarizeBy: sum
+		sourceColumn: DAY_OF_QUARTER
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column DAY_OF_YEAR
+		dataType: double
+		isHidden
+		sourceProviderType: decimal(4, 0)
+		lineageTag: b9de8a12-6ba3-4b5c-bba2-a88450899dc3
+		summarizeBy: sum
+		sourceColumn: DAY_OF_YEAR
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column WEEK_OF_MONTH
+		dataType: double
+		isHidden
+		sourceProviderType: decimal(9, 0)
+		lineageTag: b590b788-e48e-4d77-a76d-14124e2d96c3
+		summarizeBy: sum
+		sourceColumn: WEEK_OF_MONTH
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column WEEK_OF_YEAR
+		dataType: double
+		isHidden
+		sourceProviderType: decimal(2, 0)
+		lineageTag: ac17aff1-0466-4aef-b0b9-32a803df0320
+		summarizeBy: sum
+		sourceColumn: WEEK_OF_YEAR
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column PMA_WEEK
+		dataType: double
+		isHidden
+		sourceProviderType: decimal(17, 0)
+		lineageTag: 7e5ba807-8d83-44bd-8709-9e24839239a9
+		summarizeBy: sum
+		sourceColumn: PMA_WEEK
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column DAYS_IN_MONTH
+		dataType: double
+		isHidden
+		sourceProviderType: decimal(2, 0)
+		lineageTag: 1c82520f-95cf-4fce-a95c-de7c8342b338
+		summarizeBy: sum
+		sourceColumn: DAYS_IN_MONTH
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column DAY_NAME_SHORT
+		dataType: string
+		isHidden
+		sourceProviderType: nvarchar(3)
+		lineageTag: 82566029-f3cc-4df9-ae04-2cc14520ffce
+		summarizeBy: none
+		sourceColumn: DAY_NAME_SHORT
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column MONTH_NAME
+		dataType: string
+		isHidden
+		sourceProviderType: nvarchar(16777216)
+		lineageTag: b430894b-a7a9-49d0-9f7a-038658bf3c5d
+		summarizeBy: none
+		sourceColumn: MONTH_NAME
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column MONTH_NAME_SHORT
+		dataType: string
+		isHidden
+		sourceProviderType: nvarchar(3)
+		lineageTag: 8994e322-cc49-44c0-9304-5d94de88aca7
+		summarizeBy: none
+		sourceColumn: MONTH_NAME_SHORT
+		sortByColumn: MONTH_ACTUAL
+
+		changedProperty = SortByColumn
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column YEAR_MONTH_NAME_SHORT
+		dataType: string
+		isHidden
+		sourceProviderType: nvarchar(16777216)
+		lineageTag: 49f5ed72-2af6-4f71-8962-2fc61f3257d4
+		summarizeBy: none
+		sourceColumn: YEAR_MONTH_NAME_SHORT
+		sortByColumn: MONTH_ACTUAL
+
+		changedProperty = SortByColumn
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column QUARTER_NAME
+		dataType: string
+		isHidden
+		sourceProviderType: nvarchar(16777216)
+		lineageTag: 0a815d9c-9deb-4ee7-8b5c-0b8af5e22607
+		summarizeBy: none
+		sourceColumn: QUARTER_NAME
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column YEAR_WEEK_ISO
+		dataType: string
+		isHidden
+		sourceProviderType: nvarchar(16777216)
+		lineageTag: 898450b2-5d79-4e6a-849c-287e37c6e059
+		summarizeBy: none
+		sourceColumn: YEAR_WEEK_ISO
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column YEAR_WEEK_PMA
+		dataType: string
+		isHidden
+		sourceProviderType: nvarchar(16777216)
+		lineageTag: e3b54e5d-ab84-45b1-9e7f-4646e266917c
+		summarizeBy: none
+		sourceColumn: YEAR_WEEK_PMA
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column YEAR_WEEK_DOW_ISO
+		dataType: string
+		isHidden
+		sourceProviderType: nvarchar(16777216)
+		lineageTag: d8104bee-667f-4b4f-9888-a04c20fdcb62
+		summarizeBy: none
+		sourceColumn: YEAR_WEEK_DOW_ISO
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column YEAR_WEEK_DOW_PMA
+		dataType: string
+		isHidden
+		sourceProviderType: nvarchar(16777216)
+		lineageTag: 4246bdf1-f14d-4ab5-ad1e-8e61788dbddf
+		summarizeBy: none
+		sourceColumn: YEAR_WEEK_DOW_PMA
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column YEAR_MONTH_ACTUAL
+		dataType: string
+		isHidden
+		sourceProviderType: nvarchar(16777216)
+		lineageTag: 09449531-a1c0-4162-81f9-9a791bd6b82f
+		summarizeBy: none
+		sourceColumn: YEAR_MONTH_ACTUAL
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column YEAR_MONTH_ACCOUNTING
+		dataType: string
+		isHidden
+		sourceProviderType: nvarchar(16777216)
+		lineageTag: 056ea8f1-ba9f-4090-8755-9002483ab300
+		summarizeBy: none
+		sourceColumn: YEAR_MONTH_ACCOUNTING
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column WEEK_START_DATE
+		dataType: dateTime
+		isHidden
+		formatString: Long Date
+		sourceProviderType: date
+		lineageTag: 3960b4a0-7f07-4dfd-a33c-6b195ee8f4be
+		summarizeBy: none
+		sourceColumn: WEEK_START_DATE
+
+		variation Variation
+			isDefault
+			relationship: c5b23370-e608-473b-9c13-5573e039e0a6
+			defaultHierarchy: LocalDateTable_0ff3855c-4724-4d83-8b54-db79c1ad6cfa.'Date Hierarchy'
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column WEEK_END_DATE
+		dataType: dateTime
+		isHidden
+		formatString: Long Date
+		sourceProviderType: date
+		lineageTag: ae067bd3-72be-4a06-a0b5-cabed238ad0c
+		summarizeBy: none
+		sourceColumn: WEEK_END_DATE
+
+		variation Variation
+			isDefault
+			relationship: 4f09ab03-551b-455e-9489-6d75c609cd98
+			defaultHierarchy: LocalDateTable_849b7a88-147b-487d-bdc9-89a3399aded5.'Date Hierarchy'
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column MONTH_START_DATE
+		dataType: dateTime
+		isHidden
+		formatString: Long Date
+		sourceProviderType: date
+		lineageTag: ca590f4a-f688-4a41-8373-f5078aa2be9e
+		summarizeBy: none
+		sourceColumn: MONTH_START_DATE
+
+		variation Variation
+			isDefault
+			relationship: d2549f67-9cfd-4d46-9192-010262d8f835
+			defaultHierarchy: LocalDateTable_62dda2ff-87e8-48d6-8762-1026e3d34826.'Date Hierarchy'
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column MONTH_END_DATE
+		dataType: dateTime
+		isHidden
+		formatString: Long Date
+		sourceProviderType: date
+		lineageTag: 327175f1-685d-46be-86c5-f2aab71ef1bf
+		summarizeBy: none
+		sourceColumn: MONTH_END_DATE
+
+		variation Variation
+			isDefault
+			relationship: 2b8045cd-dccd-4233-a17d-3683c311ae93
+			defaultHierarchy: LocalDateTable_b14035bc-9166-4431-819a-e54dec2ea2f2.'Date Hierarchy'
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column QUARTER_START_DATE
+		dataType: dateTime
+		isHidden
+		formatString: Long Date
+		sourceProviderType: date
+		lineageTag: 947a294a-4c32-4c83-920b-a36475e547c6
+		summarizeBy: none
+		sourceColumn: QUARTER_START_DATE
+
+		variation Variation
+			isDefault
+			relationship: 15f3c3d3-0c5d-49ce-b7df-45141283d105
+			defaultHierarchy: LocalDateTable_7612dcaa-2100-4a48-9de7-466fa24f8437.'Date Hierarchy'
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column QUARTER_END_DATE
+		dataType: dateTime
+		isHidden
+		formatString: Long Date
+		sourceProviderType: date
+		lineageTag: 882a0c00-1739-4cb2-a256-4d5119bed717
+		summarizeBy: none
+		sourceColumn: QUARTER_END_DATE
+
+		variation Variation
+			isDefault
+			relationship: 5271e7cb-7f28-4de7-a470-6f90407b4fc3
+			defaultHierarchy: LocalDateTable_4224f213-0a79-4262-8202-4a556faec98b.'Date Hierarchy'
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column YEAR_START_DATE
+		dataType: dateTime
+		isHidden
+		formatString: Long Date
+		sourceProviderType: date
+		lineageTag: 8b2f9ab1-f812-4129-9487-e52a7eed3065
+		summarizeBy: none
+		sourceColumn: YEAR_START_DATE
+
+		variation Variation
+			isDefault
+			relationship: 0e81d1d3-c6e7-4d46-b5c7-895ab303d6f2
+			defaultHierarchy: LocalDateTable_48f83276-d4be-4dc3-b27a-7da7fb004ecc.'Date Hierarchy'
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column YEAR_END_DATE
+		dataType: dateTime
+		isHidden
+		formatString: Long Date
+		sourceProviderType: date
+		lineageTag: ab225e37-d63b-45dd-ab44-0c6a06a3d2f1
+		summarizeBy: none
+		sourceColumn: YEAR_END_DATE
+
+		variation Variation
+			isDefault
+			relationship: 98afa26d-c18d-4dcd-8e65-c18c6c5395f9
+			defaultHierarchy: LocalDateTable_f79a467e-8f70-4468-915e-8d38aaec4010.'Date Hierarchy'
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'Year Month'
+		dataType: string
+		isHidden
+		lineageTag: 24b86308-91c9-4df4-83d6-0e57c0b81582
+		summarizeBy: none
+		sourceColumn: Year Month
+		sortByColumn: YEAR_MONTH_ACTUAL
+
+		changedProperty = SortByColumn
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column DATE_KEY
+		dataType: double
+		isHidden
+		sourceProviderType: decimal(38, 0)
+		lineageTag: e0d6e9b2-f59b-40e1-982a-3de2e6ce05e9
+		summarizeBy: sum
+		sourceColumn: DATE_KEY
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column MONTH_NAME_SHORT_YEAR
+		dataType: string
+		isHidden
+		sourceProviderType: nvarchar(16777216)
+		lineageTag: 01691459-3ba4-4e15-bfd7-cf6b2688da8f
+		summarizeBy: none
+		sourceColumn: MONTH_NAME_SHORT_YEAR
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'DIM_DATE (2)' = m
+		mode: import
+		source =
+				let
+				    Source = Snowflake.Databases("carrix.snowflakecomputing.com","PBI_WH",[Role="ANALYTICS_DEVELOPER"]),
+				    SILVER_Database = Source{[Name="SILVER",Kind="Database"]}[Data],
+				    UTILS_Schema = SILVER_Database{[Name="UTILS",Kind="Schema"]}[Data],
+				    DIM_DATE_Table = UTILS_Schema{[Name="DIM_DATE",Kind="Table"]}[Data],
+				    #"Added Custom" = Table.AddColumn(DIM_DATE_Table, "Year Month", each [MONTH_NAME_SHORT]&" "&Text.From([YEAR_ACTUAL]))
+				in
+				    #"Added Custom"
+
+	changedProperty = IsHidden
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

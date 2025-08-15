@@ -1,0 +1,1655 @@
+table GOLD_FINANCE_METRICS
+	lineageTag: d0f41827-dc71-436f-b06c-b1b575aa3a68
+
+	measure 'Revenue Budget' = ```
+			
+			
+			 IF(SELECTEDVALUE('Measure Selection ProRata_Budget'[Measure Selection])="Gross",
+			  CALCULATE(
+			    SUM('GOLD_FINANCE_METRICS'[METRIC_VALUE]), 
+			    'GOLD_FINANCE_METRICS'[METRIC] = "Revenue",
+			    'GOLD_FINANCE_METRICS'[METRIC_GROUP]="Budget"),
+			CALCULATE(
+			    SUM('GOLD_FINANCE_METRICS'[METRIC_VALUE]), 
+			    'GOLD_FINANCE_METRICS'[METRIC] = "Revenue",
+			    'GOLD_FINANCE_METRICS'[METRIC_GROUP]="Budget-Pro-Rata")
+			)
+			```
+		displayFolder: Revenue
+		lineageTag: d1bef9fe-901c-4998-8da2-83bddec55d87
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Revenue Budget-Pro-Rata' = ```
+			
+			CALCULATE(
+			    SUM('GOLD_FINANCE_METRICS'[METRIC_VALUE]), 
+			    'GOLD_FINANCE_METRICS'[METRIC] = "Revenue",
+			    'GOLD_FINANCE_METRICS'[METRIC_GROUP]="Budget-Pro-Rata"
+			    )
+			```
+		displayFolder: Revenue
+		lineageTag: 792826f4-7d1d-4903-8150-0171025fd18a
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Revenue (Current Period)' = ```
+			
+			VAR MeasureSelectionProRata = SELECTEDVALUE('Measure Selection ProRata_Budget'[Measure Selection])
+			
+			RETURN
+			    CALCULATE(
+			        SUM('GOLD_FINANCE_METRICS'[METRIC_VALUE]),
+			        'GOLD_FINANCE_METRICS'[METRIC]="Revenue",
+			        'GOLD_FINANCE_METRICS'[METRIC_GROUP]=SELECTEDVALUE('Measure Selection ProRata_Budget'[Translate])
+			    )
+			
+			```
+		formatString: #,0
+		displayFolder: Revenue
+		lineageTag: 5ca54f9a-b2e1-47e3-a104-ee0cd487313a
+
+		annotation PBI_FormatHint = {"isDecimal":true}
+
+	measure 'Revenue (Comparison)' = ```
+			
+			VAR MeasureSelectionTime = ALLSELECTED('Measure Selection Time Comparison'[Measure Selection])
+			VAR MeasureSelectionProRata = ALLSELECTED('Measure Selection ProRata_Budget'[Measure Selection])
+			
+			RETURN
+			SWITCH(TRUE(),
+			    MeasureSelectionTime = "Budget" && MeasureSelectionProRata = "Gross", 
+			                [Revenue Budget],
+			    MeasureSelectionTime = "Budget", 
+			                [Revenue Budget],
+			    MeasureSelectionTime = "Budget" && MeasureSelectionProRata = "Pro-Rata",
+			                [Revenue Budget-Pro-Rata],
+			    MeasureSelectionTime = "Prior Year", 
+			                CALCULATE([Revenue (Current Period)],SAMEPERIODLASTYEAR(DIM_DATE[DATE_ACTUAL])),
+			    MeasureSelectionTime = "Prior Month", 
+			                CALCULATE([Revenue (Current Period)],DATEADD(DIM_DATE[DATE_ACTUAL],-1,MONTH)),
+			    MeasureSelectionTime = "Custom", 
+			                CALCULATE([Revenue (Current Period)],
+			                CALCULATETABLE(VALUES(DIM_DATE[DATE_ACTUAL]),
+			                USERELATIONSHIP(DIM_DATE[DATE_ACTUAL],
+			                'DIM_DATE (2)'[DATE_ACTUAL]),
+			                REMOVEFILTERS(DIM_DATE[DATE_ACTUAL]))),
+			    MeasureSelectionTime = "Year to Date", 
+			                CALCULATE([Revenue (Current Period)],SAMEPERIODLASTYEAR(DIM_DATE[DATE_ACTUAL]))
+			)
+			
+			
+			```
+		formatString: #,0
+		displayFolder: Revenue
+		lineageTag: 3445b9e6-846a-45c0-88e5-095b0ad6276d
+
+		annotation PBI_FormatHint = {"isDecimal":true}
+
+	measure 'Revenue (%)' = ```
+			
+			
+			 CALCULATE(
+			    DIVIDE(([Revenue (Current Period)]-[Revenue (Comparison)]),
+			    abs([Revenue (Comparison)])))
+			```
+		formatString: 0\ %;-0\ %;0\ %
+		displayFolder: Revenue
+		lineageTag: 16267780-32f4-402f-bd73-0df7e6cdf737
+
+	/// The Direct Cost Budget-Pro-Rata measure calculates the total direct costs specifically for the Budget-Pro-Rata category. It sums up the direct costs where the metric is categorized under "Direct Costs" and the metric group is specifically labeled "Budget-Pro-Rata".
+	measure 'Direct Cost Budget-Pro-Rata' = ```
+			
+			CALCULATE(
+			    SUM('GOLD_FINANCE_METRICS'[METRIC_VALUE]), 
+			    'GOLD_FINANCE_METRICS'[METRIC] = "Direct Costs",
+			    'GOLD_FINANCE_METRICS'[METRIC_GROUP]="Budget-Pro-Rata"
+			    )
+			```
+		displayFolder: Direct Cost
+		lineageTag: 38bb2f9b-3f66-4eff-ab6e-7c91bf3bcd52
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	/// The Direct Cost Budget measure calculates the sum of the direct costs for the Budget category, with an additional distinction between the "Gross" and "Pro-Rata" types based on the user’s selection. It adjusts the calculation depending on whether the user selects "Gross" or "Pro-Rata" from the Measure Selection ProRata_Budget table.
+	measure 'Direct Cost Budget' = ```
+			
+			
+			 IF(SELECTEDVALUE('Measure Selection ProRata_Budget'[Measure Selection])="Gross",
+			  CALCULATE(
+			    SUM('GOLD_FINANCE_METRICS'[METRIC_VALUE]), 
+			    'GOLD_FINANCE_METRICS'[METRIC] = "Direct Costs",
+			    'GOLD_FINANCE_METRICS'[METRIC_GROUP]="Budget"),
+			CALCULATE(
+			    SUM('GOLD_FINANCE_METRICS'[METRIC_VALUE]), 
+			    'GOLD_FINANCE_METRICS'[METRIC] = "Direct Costs",
+			    'GOLD_FINANCE_METRICS'[METRIC_GROUP]="Budget-Pro-Rata")
+			)
+			```
+		displayFolder: Direct Cost
+		lineageTag: 48c6c773-cbd0-419e-97e6-7033549dd3b0
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	/// The Direct Cost (Current Period) measure calculates the sum of the direct costs for the current period, based on the selected measure and translation value. It uses the Measure Selection ProRata_Budget table to dynamically choose the specific "Measure Selection" and "Translate" values that determine the metric filtering.
+	measure 'Direct Cost (Current Period)' = ```
+			
+			VAR MeasureSelectionProRata = SELECTEDVALUE('Measure Selection ProRata_Budget'[Measure Selection])
+			
+			RETURN
+			    CALCULATE(
+			        SUM('GOLD_FINANCE_METRICS'[METRIC_VALUE]),
+			        'GOLD_FINANCE_METRICS'[METRIC]="Direct Costs",
+			        'GOLD_FINANCE_METRICS'[METRIC_GROUP]=SELECTEDVALUE('Measure Selection ProRata_Budget'[Translate])
+			    )
+			
+			```
+		formatString: #,0
+		displayFolder: Direct Cost
+		lineageTag: 67d8afbb-4a64-4fc5-b8dd-15b5061196ad
+
+		annotation PBI_FormatHint = {"isDecimal":true}
+
+	/// The Direct Cost (Comparison) measure provides a comparison of direct costs across different time periods and categories, based on user selections. The measure dynamically adjusts its calculation based on the selected time period (e.g., "Budget", "Prior Year", "Prior Month") and pro-rata type (e.g., "Gross", "Pro-Rata").
+	measure 'Direct Cost (Comparison)' =
+			
+			VAR MeasureSelectionTime = ALLSELECTED('Measure Selection Time Comparison'[Measure Selection])
+			VAR MeasureSelectionProRata = ALLSELECTED('Measure Selection ProRata_Budget'[Measure Selection])
+			
+			RETURN
+			SWITCH(TRUE(),
+			    MeasureSelectionTime = "Budget" && MeasureSelectionProRata = "Gross", [Direct Cost Budget],
+			    MeasureSelectionTime = "Budget" && MeasureSelectionProRata = "Pro-Rata",[Direct Cost Budget-Pro-Rata],
+			    MeasureSelectionTime = "Prior Year", CALCULATE([Direct Cost (Current Period)],DATEADD(DIM_DATE[DATE_ACTUAL],-1,YEAR)),
+			    MeasureSelectionTime = "Prior Month", CALCULATE([Direct Cost (Current Period)],DATEADD(DIM_DATE[DATE_ACTUAL],-1,MONTH)),
+			    MeasureSelectionTime = "Custom", CALCULATE([Direct Cost (Current Period)],
+			                                        CALCULATETABLE(VALUES(DIM_DATE[DATE_ACTUAL]),
+			                                        USERELATIONSHIP(DIM_DATE[DATE_ACTUAL],
+			                                        'DIM_DATE (2)'[DATE_ACTUAL]),
+			                                        REMOVEFILTERS(DIM_DATE[DATE_ACTUAL]))),
+			    MeasureSelectionTime = "Year to Date", CALCULATE([Direct Cost (Current Period)],DATEADD(DIM_DATE[DATE_ACTUAL],-1,YEAR))
+			)
+		displayFolder: Direct Cost
+		lineageTag: f39f8aa9-be74-4d53-a306-b87cf468af46
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Direct Cost (%)' = ```
+			
+			
+			 CALCULATE(
+			    DIVIDE(([Direct Cost (Current Period)]-[Direct Cost (Comparison)]),
+			    abs([Direct Cost (Comparison)])))
+			```
+		formatString: 0\ %;-0\ %;0\ %
+		displayFolder: Direct Cost
+		lineageTag: 054a67c7-03f6-4062-aedb-dac1d0fcb840
+
+	measure 'Total Cost Budget' = ```
+			
+			
+			 IF(SELECTEDVALUE('Measure Selection ProRata_Budget'[Measure Selection])="Gross",
+			  CALCULATE(
+			    SUM('GOLD_FINANCE_METRICS'[METRIC_VALUE]), 
+			    'GOLD_FINANCE_METRICS'[METRIC] = "Total Costs",
+			    'GOLD_FINANCE_METRICS'[METRIC_GROUP]="Budget"),
+			CALCULATE(
+			    SUM('GOLD_FINANCE_METRICS'[METRIC_VALUE]), 
+			    'GOLD_FINANCE_METRICS'[METRIC] = "Total Costs",
+			    'GOLD_FINANCE_METRICS'[METRIC_GROUP]="Budget-Pro-Rata")
+			)
+			```
+		displayFolder: Total Cost
+		lineageTag: bd42eb40-2088-4f19-8c36-a21e2c9163fe
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Total Cost Budget-Pro-Rata' = ```
+			
+			CALCULATE(
+			    SUM('GOLD_FINANCE_METRICS'[METRIC_VALUE]), 
+			    'GOLD_FINANCE_METRICS'[METRIC] = "Total Costs",
+			    'GOLD_FINANCE_METRICS'[METRIC_GROUP]="Budget-Pro-Rata"
+			    )
+			```
+		displayFolder: Total Cost
+		lineageTag: 57db2028-586c-4470-be19-da76ae25bf31
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Total Cost (Current Period)' = ```
+			
+			VAR MeasureSelectionProRata = SELECTEDVALUE('Measure Selection ProRata_Budget'[Measure Selection])
+			
+			RETURN
+			    CALCULATE(
+			        SUM('GOLD_FINANCE_METRICS'[METRIC_VALUE]),
+			        'GOLD_FINANCE_METRICS'[METRIC]="Total Costs",
+			        'GOLD_FINANCE_METRICS'[METRIC_GROUP]=SELECTEDVALUE('Measure Selection ProRata_Budget'[Translate])
+			    )
+			
+			```
+		formatString: #,0
+		displayFolder: Total Cost
+		lineageTag: 08ae62bd-e8ae-4134-bdd2-acb743cc7fe0
+
+		annotation PBI_FormatHint = {"isDecimal":true}
+
+	measure 'Total Cost (Comparison)' =
+			
+			VAR MeasureSelectionTime = ALLSELECTED('Measure Selection Time Comparison'[Measure Selection])
+			VAR MeasureSelectionProRata = ALLSELECTED('Measure Selection ProRata_Budget'[Measure Selection])
+			
+			RETURN
+			SWITCH(TRUE(),
+			    MeasureSelectionTime = "Budget" && MeasureSelectionProRata = "Gross", [Total Cost Budget],
+			    MeasureSelectionTime = "Budget" && MeasureSelectionProRata = "Pro-Rata",[Total Cost Budget-Pro-Rata],
+			    MeasureSelectionTime = "Prior Year", CALCULATE([Total Cost (Current Period)],DATEADD(DIM_DATE[DATE_ACTUAL],-1,YEAR)),
+			    MeasureSelectionTime = "Prior Month", CALCULATE([Total Cost (Current Period)],DATEADD(DIM_DATE[DATE_ACTUAL],-1,MONTH)),
+			    MeasureSelectionTime = "Custom", CALCULATE([Total Cost (Current Period)],
+			                                        CALCULATETABLE(VALUES(DIM_DATE[DATE_ACTUAL]),
+			                                        USERELATIONSHIP(DIM_DATE[DATE_ACTUAL],
+			                                        'DIM_DATE (2)'[DATE_ACTUAL]),
+			                                        REMOVEFILTERS(DIM_DATE[DATE_ACTUAL]))),
+			    MeasureSelectionTime = "Year to Date", CALCULATE([Total Cost (Current Period)],DATEADD(DIM_DATE[DATE_ACTUAL],-1,YEAR))
+			)
+		formatString: #,0
+		displayFolder: Total Cost
+		lineageTag: dc3b21e4-4725-44ef-ac05-391629162ae1
+
+		annotation PBI_FormatHint = {"isDecimal":true}
+
+	measure 'Total Cost (%)' =
+			
+			CALCULATE(
+			    DIVIDE(([Total Cost (Current Period)]-[Total Cost (Comparison)]),
+			    abs([Total Cost (Comparison)])))
+		formatString: 0\ %;-0\ %;0\ %
+		displayFolder: Total Cost
+		lineageTag: ed25c678-1822-4fdc-ab02-59d33f437971
+
+	measure 'EBITDA Budget' = ```
+			
+			
+			 IF(SELECTEDVALUE('Measure Selection ProRata_Budget'[Measure Selection])="Gross",
+			  CALCULATE(
+			    SUM('GOLD_FINANCE_METRICS'[METRIC_VALUE]), 
+			    'GOLD_FINANCE_METRICS'[METRIC] = "EBITDA",
+			    'GOLD_FINANCE_METRICS'[METRIC_GROUP]="Budget"),
+			CALCULATE(
+			    SUM('GOLD_FINANCE_METRICS'[METRIC_VALUE]), 
+			    'GOLD_FINANCE_METRICS'[METRIC] = "EBITDA",
+			    'GOLD_FINANCE_METRICS'[METRIC_GROUP]="Budget-Pro-Rata")
+			)
+			```
+		formatString: #,0
+		displayFolder: EBITDA
+		lineageTag: 44a06c6a-ef7c-4836-97d9-55b1063db301
+
+		annotation PBI_FormatHint = {"isDecimal":true}
+
+	measure 'EBITDA Budget-Pro-Rata' = ```
+			
+			CALCULATE(
+			    SUM('GOLD_FINANCE_METRICS'[METRIC_VALUE]), 
+			    'GOLD_FINANCE_METRICS'[METRIC] = "EBITDA",
+			    'GOLD_FINANCE_METRICS'[METRIC_GROUP]="Budget-Pro-Rata"
+			    )
+			```
+		displayFolder: EBITDA
+		lineageTag: 9978b1a4-99b7-4111-b8fe-aed63f447837
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'EBITDA (Current Period)' = ```
+			
+			VAR MeasureSelectionProRata = SELECTEDVALUE('Measure Selection ProRata_Budget'[Measure Selection])
+			
+			RETURN
+			    CALCULATE(
+			        SUM('GOLD_FINANCE_METRICS'[METRIC_VALUE]),
+			        'GOLD_FINANCE_METRICS'[METRIC]="EBITDA",
+			        'GOLD_FINANCE_METRICS'[METRIC_GROUP]=SELECTEDVALUE('Measure Selection ProRata_Budget'[Translate])
+			    )
+			
+			```
+		formatString: #,0
+		displayFolder: EBITDA
+		lineageTag: dd8e2243-b538-4098-8523-67b6d26a87f1
+
+		annotation PBI_FormatHint = {"isDecimal":true}
+
+	measure 'EBITDA (Comparison)' =
+			
+			VAR MeasureSelectionTime = ALLSELECTED('Measure Selection Time Comparison'[Measure Selection])
+			VAR MeasureSelectionProRata = ALLSELECTED('Measure Selection ProRata_Budget'[Measure Selection])
+			
+			RETURN
+			SWITCH(TRUE(),
+			    MeasureSelectionTime = "Budget" && MeasureSelectionProRata = "Gross", [EBITDA Budget],
+			    MeasureSelectionTime = "Budget" && MeasureSelectionProRata = "Pro-Rata",[EBITDA Budget-Pro-Rata],
+			    MeasureSelectionTime = "Prior Year", CALCULATE([EBITDA (Current Period)],DATEADD(DIM_DATE[DATE_ACTUAL],-1,YEAR)),
+			    MeasureSelectionTime = "Prior Month", CALCULATE([EBITDA (Current Period)],DATEADD(DIM_DATE[DATE_ACTUAL],-1,MONTH)),
+			    MeasureSelectionTime = "Custom", CALCULATE([EBITDA (Current Period)],
+			                                        CALCULATETABLE(VALUES(DIM_DATE[DATE_ACTUAL]),
+			                                        USERELATIONSHIP(DIM_DATE[DATE_ACTUAL],
+			                                        'DIM_DATE (2)'[DATE_ACTUAL]),
+			                                        REMOVEFILTERS(DIM_DATE[DATE_ACTUAL]))),
+			    MeasureSelectionTime = "Year to Date", CALCULATE([EBITDA (Current Period)],DATEADD(DIM_DATE[DATE_ACTUAL],-1,YEAR))
+			)
+		formatString: #,0
+		displayFolder: EBITDA
+		lineageTag: 75dc3d15-54ee-4e36-b868-13eac9159cd5
+
+		annotation PBI_FormatHint = {"isDecimal":true}
+
+	measure 'EBITDA (%)' = ```
+			
+			
+			 CALCULATE(
+			    DIVIDE(([EBITDA (Current Period)]-[EBITDA (Comparison)]),
+			    abs([EBITDA (Comparison)])))
+			```
+		formatString: #,0\ %;-#,0\ %;#,0\ %
+		displayFolder: EBITDA
+		lineageTag: f69206bf-5b2b-46db-a6fd-24fd724a21b4
+
+	measure 'EBITDA Margin (Current Period)' = CALCULATE(DIVIDE([EBITDA (Current Period)],[Revenue (Current Period)]))
+		formatString: 0\ %;-0\ %;0\ %
+		displayFolder: EBITDA Margin
+		lineageTag: 355234dc-6afc-41e4-985c-15e5c4f97f1d
+
+	measure 'EBITDA Margin (Comparison)' = CALCULATE(DIVIDE([EBITDA (Comparison)],[Revenue (Comparison)]))
+		formatString: 0\ %;-0\ %;0\ %
+		displayFolder: EBITDA Margin
+		lineageTag: fba32f3b-d150-452a-99f9-521b7081f65d
+
+	measure 'EBITDA Margin %' = [EBITDA Margin (Current Period)]-[EBITDA Margin (Comparison)]
+		formatString: 0\ %;-0\ %;0\ %
+		displayFolder: EBITDA Margin
+		lineageTag: 93b16453-03e4-4e0d-ae6f-e4ef7783329e
+
+	measure Revenue = ```
+			
+			
+			CALCULATE(
+			    SUM('GOLD_FINANCE_METRICS'[METRIC_VALUE]), 
+			    'GOLD_FINANCE_METRICS'[METRIC] = "Revenue",
+			    'GOLD_FINANCE_METRICS'[METRIC_GROUP]=SELECTEDVALUE('Measure Selection ProRata_Budget'[Display name])
+			    )
+			```
+		displayFolder: Revenue
+		lineageTag: fa6a8458-b2f5-416c-8eec-04530f95acc2
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Metrics (Current Period)' = ```
+			
+			VAR MeasureSelectionProRata = SELECTEDVALUE('Measure Selection ProRata_Budget'[Measure Selection])
+			
+			RETURN
+			    CALCULATE(
+			        SUM('GOLD_FINANCE_METRICS'[METRIC_VALUE]),
+			        'GOLD_FINANCE_METRICS'[METRIC_GROUP]=SELECTEDVALUE('Measure Selection ProRata_Budget'[Translate])
+			    )
+			
+			```
+		formatString: #,0
+		displayFolder: Metrics aggregated
+		lineageTag: 6ac93d84-c837-46ab-b9a3-90bb62bc6868
+
+		annotation PBI_FormatHint = {"isDecimal":true}
+
+	measure 'Volume (Current)' = ```
+			
+			
+			CALCULATE(
+			    SUM('GOLD_FINANCE_METRICS'[METRIC_VALUE]),
+			    GOLD_FINANCE_METRICS[METRIC_DOMAIN] = "Volume",
+			    GOLD_FINANCE_METRICS[METRIC_GROUP] = "Actual"
+			)
+			
+			```
+		displayFolder: Volume
+		lineageTag: 4b2f7cd5-84d6-4276-a4b4-7a8788e95b30
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Volume (Comparison)' =
+			
+			VAR MeasureSelectionTime = ALLSELECTED('Measure Selection Time Comparison'[Measure Selection])
+			VAR MeasureSelectionProRata = ALLSELECTED('Measure Selection ProRata_Budget'[Measure Selection])
+			
+			RETURN
+			SWITCH(TRUE(),
+			    MeasureSelectionTime = "Budget" && MeasureSelectionProRata = "Gross", [Volume Budget],
+			    MeasureSelectionTime = "Budget" && MeasureSelectionProRata = "Pro-Rata",BLANK(),
+			    MeasureSelectionTime = "Prior Year", CALCULATE([Volume (Current)],DATEADD(DIM_DATE[DATE_ACTUAL],-1,YEAR)),
+			    MeasureSelectionTime = "Prior Month", CALCULATE([Volume (Current)],DATEADD(DIM_DATE[DATE_ACTUAL],-1,MONTH)),
+			    MeasureSelectionTime = "Custom", CALCULATE([Volume (Current)],
+			                                        CALCULATETABLE(VALUES(DIM_DATE[DATE_ACTUAL]),
+			                                        USERELATIONSHIP(DIM_DATE[DATE_ACTUAL],
+			                                        'DIM_DATE (2)'[DATE_ACTUAL]),
+			                                        REMOVEFILTERS(DIM_DATE[DATE_ACTUAL]))),
+			    MeasureSelectionTime = "Year to Date", CALCULATE([Volume (Current)],DATEADD(DIM_DATE[DATE_ACTUAL],-1,YEAR))
+			)
+		displayFolder: Volume
+		lineageTag: a51d4791-32fc-415f-b150-f9a7343a0747
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Volume (%)' = ```
+			
+			
+			 CALCULATE(
+			    DIVIDE(([Volume (Current)]-[Volume (Comparison)]),
+			    abs([Volume (Comparison)])))
+			```
+		formatString: 0\ %;-0\ %;0\ %
+		displayFolder: Volume
+		lineageTag: 1531b6ab-18a0-4747-84bd-e270520d72b2
+
+	measure 'Volume Budget' = ```
+			
+			
+			  CALCULATE(
+			    SUM('GOLD_FINANCE_METRICS'[METRIC_VALUE]), 
+			    'GOLD_FINANCE_METRICS'[METRIC_DOMAIN] = "Volume",
+			    'GOLD_FINANCE_METRICS'[METRIC_GROUP]="Budget")
+			
+			```
+		displayFolder: Volume
+		lineageTag: f1cf0ac6-bd2b-452c-aea2-fde73dc80946
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Metrics (Budget)' =
+			
+			IF(SELECTEDVALUE('Measure Selection ProRata_Budget'[Measure Selection])="Gross",
+			CALCULATE(SUM('GOLD_FINANCE_METRICS'[METRIC_VALUE]),'GOLD_FINANCE_METRICS'[METRIC_GROUP]="Budget"),
+			CALCULATE(SUM('GOLD_FINANCE_METRICS'[METRIC_VALUE]),'GOLD_FINANCE_METRICS'[METRIC_GROUP]="Budget-Pro-Rata")
+			)
+		formatString: #,0
+		displayFolder: Metrics aggregated
+		lineageTag: c463ddc7-bd0c-4d6d-9d19-0a35fb26ba67
+
+		annotation PBI_FormatHint = {"isDecimal":true}
+
+	measure 'Metrics (Comparison)' =
+			
+			VAR MeasureSelectionTime = ALLSELECTED('Measure Selection Time Comparison'[Measure Selection])
+			VAR MeasureSelectionProRata = ALLSELECTED('Measure Selection ProRata_Budget'[Measure Selection])
+			
+			RETURN
+			SWITCH(TRUE(),
+			    MeasureSelectionTime = "Budget" && MeasureSelectionProRata = "Gross", CALCULATE([Metrics (Budget)],DATEADD(DIM_DATE[DATE_ACTUAL],-1,YEAR)),
+			    MeasureSelectionTime = "Budget" && MeasureSelectionProRata = "Pro-Rata",CALCULATE([Metrics (Budget)],DATEADD(DIM_DATE[DATE_ACTUAL],-1,YEAR)),
+			    MeasureSelectionTime = "Prior Year", CALCULATE([Metrics (Current Period)],DATEADD(DIM_DATE[DATE_ACTUAL],-1,YEAR)),
+			    MeasureSelectionTime = "Prior Month", CALCULATE([Metrics (Current Period)],DATEADD(DIM_DATE[DATE_ACTUAL],-1,MONTH)),
+			    MeasureSelectionTime = "Custom", CALCULATE([Metrics (Current Period)],
+			                                        CALCULATETABLE(VALUES(DIM_DATE[DATE_ACTUAL]),
+			                                        USERELATIONSHIP(DIM_DATE[DATE_ACTUAL],
+			                                        'DIM_DATE (2)'[DATE_ACTUAL]),
+			                                        REMOVEFILTERS(DIM_DATE[DATE_ACTUAL]))),
+			    MeasureSelectionTime = "Year to Date", CALCULATE([Metrics (Current Period)],DATEADD(DIM_DATE[DATE_ACTUAL],-1,YEAR))
+			)
+		formatString: #,0
+		displayFolder: Metrics aggregated
+		lineageTag: b7fbf09d-df94-4c01-ac83-672e53e76692
+
+		annotation PBI_FormatHint = {"isDecimal":true}
+
+	measure 'Metrics Budget' = ```
+			
+			CALCULATE(
+			    SUM('GOLD_FINANCE_METRICS'[METRIC_VALUE]), 
+			    'GOLD_FINANCE_METRICS'[METRIC_GROUP]="Budget"
+			    )
+			```
+		displayFolder: Metrics aggregated
+		lineageTag: 08ab07e2-1956-468a-b149-3c9d7939cbce
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Metrics Budget-Pro-Rata' = ```
+			
+			CALCULATE(
+			    SUM('GOLD_FINANCE_METRICS'[METRIC_VALUE]), 
+			    'GOLD_FINANCE_METRICS'[METRIC_GROUP]="Budget-Pro-Rata"
+			    )
+			```
+		displayFolder: Metrics aggregated
+		lineageTag: 565b3df3-89d0-415c-a643-7ba2919d8d32
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Revenue Custom' =
+			
+			IF(MONTH([MAX Selected Dates])<=MONTH([MAX Selected Dates (2)]),
+			                CALCULATE([Revenue (Current Period)],
+			                (DATEADD(DIM_DATE[DATE_ACTUAL],[Period Year Custom],YEAR))),
+			                BLANK())
+		formatString: #,0
+		displayFolder: Revenue
+		lineageTag: e08610bb-f7d9-44c8-9e12-188e5831e2a6
+
+		annotation PBI_FormatHint = {"isDecimal":true}
+
+	measure 'Revenue (Prior Period)' = ```
+			
+			VAR MeasureSelectionTime = ALLSELECTED('Measure Selection Time Comparison'[Measure Selection])
+			VAR MeasureSelectionProRata = ALLSELECTED('Measure Selection ProRata_Budget'[Measure Selection])
+			
+			RETURN
+			SWITCH(TRUE(),
+			    MeasureSelectionTime = "Budget" && MeasureSelectionProRata = "Gross", 
+			                [Revenue Budget],
+			    MeasureSelectionTime = "Budget" && MeasureSelectionProRata = "Pro-Rata",
+			                [Revenue Budget-Pro-Rata],
+			    MeasureSelectionTime = "Prior Year", 
+			                CALCULATE([Revenue (Current Period)],SAMEPERIODLASTYEAR(DIM_DATE[DATE_ACTUAL])),
+			    MeasureSelectionTime = "Prior Month", 
+			                CALCULATE([Revenue (Current Period)],DATEADD(DIM_DATE[DATE_ACTUAL],-1,MONTH)),
+			    MeasureSelectionTime = "Custom", 
+			                [Revenue Custom],
+			    MeasureSelectionTime = "Year to Date", 
+			                CALCULATE([Revenue (Current Period)],SAMEPERIODLASTYEAR(DIM_DATE[DATE_ACTUAL]))
+			)
+			
+			```
+		displayFolder: Revenue
+		lineageTag: d3849338-d19d-45ac-b96d-f43be9772fb8
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Volume Custom' =
+			
+			IF(MONTH([MAX Selected Dates])<=MONTH([MAX Selected Dates (2)]),
+			                CALCULATE([Volume (Current)],
+			                (DATEADD(DIM_DATE[DATE_ACTUAL],[Period Year Custom],YEAR))),
+			                BLANK())
+		displayFolder: Volume
+		lineageTag: 0040dfed-5b92-4567-8d7e-ea8d66a336bc
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	/// The Direct Cost Custom measure calculates the direct costs for a custom period based on the selected date range, considering a custom shift in time (via the [Period Year Custom] parameter). It uses the IF function to determine whether the current month is less than or equal to the month of the second selected date. If this condition is met, it calculates the direct cost for a custom period; otherwise, it returns a blank.
+	measure 'Direct Cost Custom' =
+			
+			IF(MONTH([MAX Selected Dates])<=MONTH([MAX Selected Dates (2)]),
+			                CALCULATE([Direct Cost (Current Period)],
+			                (DATEADD(DIM_DATE[DATE_ACTUAL],[Period Year Custom],YEAR))),
+			                BLANK())
+		displayFolder: Direct Cost
+		lineageTag: f0b08753-b9c3-47c6-b42e-aba8d430625c
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Total Cost Custom' =
+			
+			IF(MONTH([MAX Selected Dates])<=MONTH([MAX Selected Dates (2)]),
+			                CALCULATE([Total Cost (Current Period)],
+			                (DATEADD(DIM_DATE[DATE_ACTUAL],[Period Year Custom],YEAR))),
+			                BLANK())
+		displayFolder: Total Cost
+		lineageTag: 2bf16f03-3733-45e7-aa2c-0a5cc7169df5
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'EBITDA Custom' =
+			
+			IF(MONTH([MAX Selected Dates])<=MONTH([MAX Selected Dates (2)]),
+			                CALCULATE([EBITDA (Current Period)],
+			                (DATEADD(DIM_DATE[DATE_ACTUAL],[Period Year Custom],YEAR))),
+			                BLANK())
+		displayFolder: EBITDA
+		lineageTag: 0adb62bc-fa28-4b9a-840c-948a6df489a2
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Volume (Prior Period)' =
+			
+			VAR MeasureSelectionTime = ALLSELECTED('Measure Selection Time Comparison'[Measure Selection])
+			VAR MeasureSelectionProRata = ALLSELECTED('Measure Selection ProRata_Budget'[Measure Selection])
+			
+			RETURN
+			SWITCH(TRUE(),
+			    MeasureSelectionTime = "Budget" && MeasureSelectionProRata = "Gross", [Volume Budget],
+			    MeasureSelectionTime = "Budget" && MeasureSelectionProRata = "Pro-Rata",BLANK(),
+			    MeasureSelectionTime = "Prior Year", CALCULATE([Volume (Current)],DATEADD(DIM_DATE[DATE_ACTUAL],-1,YEAR)),
+			    MeasureSelectionTime = "Prior Month", CALCULATE([Volume (Current)],DATEADD(DIM_DATE[DATE_ACTUAL],-1,MONTH)),
+			    MeasureSelectionTime = "Custom", [Volume Custom],
+			    MeasureSelectionTime = "Year to Date", CALCULATE([Volume (Current)],DATEADD(DIM_DATE[DATE_ACTUAL],-1,YEAR))
+			)
+		displayFolder: Volume
+		lineageTag: d2734fd6-ee55-4e77-a792-0a613953b9c4
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Total Cost (Prior Period)' =
+			
+			VAR MeasureSelectionTime = ALLSELECTED('Measure Selection Time Comparison'[Measure Selection])
+			VAR MeasureSelectionProRata = ALLSELECTED('Measure Selection ProRata_Budget'[Measure Selection])
+			
+			RETURN
+			SWITCH(TRUE(),
+			    MeasureSelectionTime = "Budget" && MeasureSelectionProRata = "Gross", [Total Cost Budget],
+			    MeasureSelectionTime = "Budget" && MeasureSelectionProRata = "Pro-Rata",[Total Cost Budget-Pro-Rata],
+			    MeasureSelectionTime = "Prior Year", CALCULATE([Total Cost (Current Period)],DATEADD(DIM_DATE[DATE_ACTUAL],-1,YEAR)),
+			    MeasureSelectionTime = "Prior Month", CALCULATE([Total Cost (Current Period)],DATEADD(DIM_DATE[DATE_ACTUAL],-1,MONTH)),
+			    MeasureSelectionTime = "Custom", [Total Cost Custom],
+			    MeasureSelectionTime = "Year to Date", CALCULATE([Total Cost (Current Period)],DATEADD(DIM_DATE[DATE_ACTUAL],-1,YEAR))
+			)
+		displayFolder: Total Cost
+		lineageTag: a82faef3-f90e-4f26-a6ac-44d7e5d290eb
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	/// The Direct Cost (Prior Period) measure is designed to calculate the direct costs for specific periods based on the user’s selection, allowing for comparisons to the current period in different timeframes such as "Budget", "Prior Year", "Prior Month", and "Year to Date". This measure also considers pro-rata adjustments like "Gross" and "Pro-Rata".
+	measure 'Direct Cost (Prior Period)' =
+			
+			VAR MeasureSelectionTime = ALLSELECTED('Measure Selection Time Comparison'[Measure Selection])
+			VAR MeasureSelectionProRata = ALLSELECTED('Measure Selection ProRata_Budget'[Measure Selection])
+			
+			RETURN
+			SWITCH(TRUE(),
+			    MeasureSelectionTime = "Budget" && MeasureSelectionProRata = "Gross", [Direct Cost Budget],
+			    MeasureSelectionTime = "Budget" && MeasureSelectionProRata = "Pro-Rata",[Direct Cost Budget-Pro-Rata],
+			    MeasureSelectionTime = "Prior Year", CALCULATE([Direct Cost (Current Period)],DATEADD(DIM_DATE[DATE_ACTUAL],-1,YEAR)),
+			    MeasureSelectionTime = "Prior Month", CALCULATE([Direct Cost (Current Period)],DATEADD(DIM_DATE[DATE_ACTUAL],-1,MONTH)),
+			    MeasureSelectionTime = "Custom", [Direct Cost Custom],
+			    MeasureSelectionTime = "Year to Date", CALCULATE([Direct Cost (Current Period)],DATEADD(DIM_DATE[DATE_ACTUAL],-1,YEAR))
+			)
+		displayFolder: Direct Cost
+		lineageTag: eb7a81d7-6e90-4cc4-a554-97e209fd01e0
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'EBITDA (Prior Year)' =
+			
+			VAR MeasureSelectionTime = ALLSELECTED('Measure Selection Time Comparison'[Measure Selection])
+			VAR MeasureSelectionProRata = ALLSELECTED('Measure Selection ProRata_Budget'[Measure Selection])
+			
+			RETURN
+			SWITCH(TRUE(),
+			    MeasureSelectionTime = "Budget" && MeasureSelectionProRata = "Gross", [EBITDA Budget],
+			    MeasureSelectionTime = "Budget" && MeasureSelectionProRata = "Pro-Rata",[EBITDA Budget-Pro-Rata],
+			    MeasureSelectionTime = "Prior Year", CALCULATE([EBITDA (Current Period)],DATEADD(DIM_DATE[DATE_ACTUAL],-1,YEAR)),
+			    MeasureSelectionTime = "Prior Month", CALCULATE([EBITDA (Current Period)],DATEADD(DIM_DATE[DATE_ACTUAL],-1,MONTH)),
+			    MeasureSelectionTime = "Custom", [EBITDA Custom],
+			    MeasureSelectionTime = "Year to Date", CALCULATE([EBITDA (Current Period)],DATEADD(DIM_DATE[DATE_ACTUAL],-1,YEAR))
+			)
+		formatString: #,0
+		displayFolder: EBITDA
+		lineageTag: e742811d-9a4b-4144-a195-813b487ea2a3
+
+		annotation PBI_FormatHint = {"isDecimal":true}
+
+	measure 'Title Volume by Month' = CONCATENATE("Volume by Month ", SELECTEDVALUE(GOLD_FINANCE_METRICS[METRIC]))
+		lineageTag: 41c0a636-8b06-4a2c-886e-0988870e5e5a
+
+	measure 'Title Volume, % Change' = CONCATENATE("Volume, % Change ", SELECTEDVALUE(GOLD_FINANCE_METRICS[METRIC]))
+		lineageTag: 0998b76d-8758-43e7-9558-cdbb8fbad522
+
+	measure 'Title Volume Distribution' = CONCATENATE("Volume Distribution ", SELECTEDVALUE(GOLD_FINANCE_METRICS[METRIC]))
+		lineageTag: 57eb4ae9-3e12-457a-9df2-222115e9686d
+
+	measure 'Volume Auto (Current)' =
+			
+			
+			VAR MeasureSelectionProRata = SELECTEDVALUE('Measure Selection ProRata_Budget'[Measure Selection])
+			
+			RETURN
+			    CALCULATE(
+			        SUM('GOLD_FINANCE_METRICS'[METRIC_VALUE]),
+			        'GOLD_FINANCE_METRICS'[METRIC]="Autos",
+			        'GOLD_FINANCE_METRICS'[METRIC_GROUP]=SELECTEDVALUE('Measure Selection ProRata_Budget'[Translate])
+			    )
+		formatString: #,0
+		displayFolder: Volume
+		lineageTag: 0220622c-cb55-4c9d-8dfa-106de82d167d
+
+		annotation PBI_FormatHint = {"isDecimal":true}
+
+	measure 'Volume CFS (Current)' =
+			
+			
+			VAR MeasureSelectionProRata = SELECTEDVALUE('Measure Selection ProRata_Budget'[Measure Selection])
+			
+			RETURN
+			    CALCULATE(
+			        SUM('GOLD_FINANCE_METRICS'[METRIC_VALUE]),
+			        'GOLD_FINANCE_METRICS'[METRIC]="CFS",
+			        'GOLD_FINANCE_METRICS'[METRIC_GROUP]=SELECTEDVALUE('Measure Selection ProRata_Budget'[Translate])
+			    )
+		formatString: #,0
+		displayFolder: Volume
+		lineageTag: edaeeed0-f662-41ff-8ed1-368eedfdf788
+
+		annotation PBI_FormatHint = {"isDecimal":true}
+
+	measure 'Volume Container Moves (Current)' = ```
+			
+			
+			    CALCULATE(
+			        SUM('GOLD_FINANCE_METRICS'[METRIC_VALUE]),
+			        'GOLD_FINANCE_METRICS'[METRIC]="Container Moves",
+			        'GOLD_FINANCE_METRICS'[METRIC_DOMAIN]="Volume",
+			        'GOLD_FINANCE_METRICS'[METRIC_GROUP]="Actual"
+			    )
+			```
+		displayFolder: Volume
+		lineageTag: 0ccefb3e-6d45-4bc0-b1b7-7b8d6be35d6b
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Volume Cruise Passenger (Current)' =
+			
+			
+			VAR MeasureSelectionProRata = SELECTEDVALUE('Measure Selection ProRata_Budget'[Measure Selection])
+			
+			RETURN
+			    CALCULATE(
+			        SUM('GOLD_FINANCE_METRICS'[METRIC_VALUE]),
+			        'GOLD_FINANCE_METRICS'[METRIC]="Cruise Passenger",
+			        'GOLD_FINANCE_METRICS'[METRIC_GROUP]=SELECTEDVALUE('Measure Selection ProRata_Budget'[Translate])
+			    )
+		formatString: #,0
+		displayFolder: Volume
+		lineageTag: 8c273774-3322-4fcb-a4f0-3470ac8fb5e4
+
+		annotation PBI_FormatHint = {"isDecimal":true}
+
+	measure 'Volume Rail Lifts (Current)' =
+			
+			
+			VAR MeasureSelectionProRata = SELECTEDVALUE('Measure Selection ProRata_Budget'[Measure Selection])
+			
+			RETURN
+			    CALCULATE(
+			        SUM('GOLD_FINANCE_METRICS'[METRIC_VALUE]),
+			        'GOLD_FINANCE_METRICS'[METRIC]="Rail Lifts",
+			        'GOLD_FINANCE_METRICS'[METRIC_GROUP]=SELECTEDVALUE('Measure Selection ProRata_Budget'[Translate])
+			    )
+		formatString: #,0
+		displayFolder: Volume
+		lineageTag: 04b4b1b5-9a4a-4162-ab9c-fc361264b6d9
+
+		annotation PBI_FormatHint = {"isDecimal":true}
+
+	measure 'Volume Auto (Comparison)' =
+			
+			VAR MeasureSelectionTime = ALLSELECTED('Measure Selection Time Comparison'[Measure Selection])
+			
+			RETURN
+			SWITCH(TRUE(),
+			    MeasureSelectionTime = "Budget", [Volume Auto Budget],
+			    MeasureSelectionTime = "Prior Year", CALCULATE([Volume Auto (Current)],DATEADD(DIM_DATE[DATE_ACTUAL],-1,YEAR)),
+			    MeasureSelectionTime = "Prior Month", CALCULATE([Volume Auto (Current)],DATEADD(DIM_DATE[DATE_ACTUAL],-1,MONTH)),
+			    MeasureSelectionTime = "Custom", CALCULATE([Volume Auto (Current)],
+			                                        CALCULATETABLE(VALUES(DIM_DATE[DATE_ACTUAL]),
+			                                        USERELATIONSHIP(DIM_DATE[DATE_ACTUAL],
+			                                        'DIM_DATE (2)'[DATE_ACTUAL]),
+			                                        REMOVEFILTERS(DIM_DATE[DATE_ACTUAL]))),
+			    MeasureSelectionTime = "Year to Date", CALCULATE([Volume Auto (Current)],DATEADD(DIM_DATE[DATE_ACTUAL],-1,YEAR))
+			)
+		displayFolder: Volume
+		lineageTag: 1bbc3d25-905f-4275-92b0-7c5ffb8b1791
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Volume CFS (Comparison)' =
+			
+			VAR MeasureSelectionTime = ALLSELECTED('Measure Selection Time Comparison'[Measure Selection])
+			
+			RETURN
+			SWITCH(TRUE(),
+			    MeasureSelectionTime = "Budget", [Volume CFS Budget],
+			    MeasureSelectionTime = "Prior Year", CALCULATE([Volume CFS (Current)],DATEADD(DIM_DATE[DATE_ACTUAL],-1,YEAR)),
+			    MeasureSelectionTime = "Prior Month", CALCULATE([Volume CFS (Current)],DATEADD(DIM_DATE[DATE_ACTUAL],-1,MONTH)),
+			    MeasureSelectionTime = "Custom", CALCULATE([Volume CFS (Current)],
+			                                        CALCULATETABLE(VALUES(DIM_DATE[DATE_ACTUAL]),
+			                                        USERELATIONSHIP(DIM_DATE[DATE_ACTUAL],
+			                                        'DIM_DATE (2)'[DATE_ACTUAL]),
+			                                        REMOVEFILTERS(DIM_DATE[DATE_ACTUAL]))),
+			    MeasureSelectionTime = "Year to Date", CALCULATE([Volume CFS (Current)],DATEADD(DIM_DATE[DATE_ACTUAL],-1,YEAR))
+			)
+		formatString: #,0
+		displayFolder: Volume
+		lineageTag: eb1d24ab-3a7a-40c8-bc19-6149ac070279
+
+		annotation PBI_FormatHint = {"isDecimal":true}
+
+	measure 'Volume Container Moves (Comparison)' =
+			
+			VAR MeasureSelectionTime = ALLSELECTED('Measure Selection Time Comparison'[Measure Selection])
+			
+			RETURN
+			SWITCH(TRUE(),
+			    MeasureSelectionTime = "Budget", [Volume Container Moves Budget],
+			    MeasureSelectionTime = "Prior Year", CALCULATE([Volume Container Moves (Current)],DATEADD(DIM_DATE[DATE_ACTUAL],-1,YEAR)),
+			    MeasureSelectionTime = "Prior Month", CALCULATE([Volume Container Moves (Current)],DATEADD(DIM_DATE[DATE_ACTUAL],-1,MONTH)),
+			    MeasureSelectionTime = "Custom", CALCULATE([Volume Container Moves (Current)],
+			                                        CALCULATETABLE(VALUES(DIM_DATE[DATE_ACTUAL]),
+			                                        USERELATIONSHIP(DIM_DATE[DATE_ACTUAL],
+			                                        'DIM_DATE (2)'[DATE_ACTUAL]),
+			                                        REMOVEFILTERS(DIM_DATE[DATE_ACTUAL]))),
+			    MeasureSelectionTime = "Year to Date", CALCULATE([Volume Container Moves (Current)],DATEADD(DIM_DATE[DATE_ACTUAL],-1,YEAR))
+			)
+		formatString: #,0
+		displayFolder: Volume
+		lineageTag: 600db111-69dd-4653-8efd-c887ab5c7b00
+
+		annotation PBI_FormatHint = {"isDecimal":true}
+
+	measure 'Volume Cruise Passenger (Comparison)' =
+			
+			VAR MeasureSelectionTime = ALLSELECTED('Measure Selection Time Comparison'[Measure Selection])
+			
+			RETURN
+			SWITCH(TRUE(),
+			    MeasureSelectionTime = "Budget", [Volume Cruise Passenger Budget],
+			    MeasureSelectionTime = "Prior Year", CALCULATE([Volume Cruise Passenger (Current)],DATEADD(DIM_DATE[DATE_ACTUAL],-1,YEAR)),
+			    MeasureSelectionTime = "Prior Month", CALCULATE([Volume Cruise Passenger (Current)],DATEADD(DIM_DATE[DATE_ACTUAL],-1,MONTH)),
+			    MeasureSelectionTime = "Custom", CALCULATE([Volume Cruise Passenger (Current)],
+			                                        CALCULATETABLE(VALUES(DIM_DATE[DATE_ACTUAL]),
+			                                        USERELATIONSHIP(DIM_DATE[DATE_ACTUAL],
+			                                        'DIM_DATE (2)'[DATE_ACTUAL]),
+			                                        REMOVEFILTERS(DIM_DATE[DATE_ACTUAL]))),
+			    MeasureSelectionTime = "Year to Date", CALCULATE([Volume Cruise Passenger (Current)],DATEADD(DIM_DATE[DATE_ACTUAL],-1,YEAR))
+			)
+		formatString: #,0.00
+		displayFolder: Volume
+		lineageTag: 4673a00e-06ae-488d-be46-b005f155f457
+
+	measure 'Volume Rail Lifts (Comparison)' =
+			
+			VAR MeasureSelectionTime = ALLSELECTED('Measure Selection Time Comparison'[Measure Selection])
+			
+			RETURN
+			SWITCH(TRUE(),
+			    MeasureSelectionTime = "Budget", [Volume Rail Lifts Budget],
+			    MeasureSelectionTime = "Prior Year", CALCULATE([Volume Rail Lifts (Current)],DATEADD(DIM_DATE[DATE_ACTUAL],-1,YEAR)),
+			    MeasureSelectionTime = "Prior Month", CALCULATE([Volume Rail Lifts (Current)],DATEADD(DIM_DATE[DATE_ACTUAL],-1,MONTH)),
+			    MeasureSelectionTime = "Custom", CALCULATE([Volume Rail Lifts (Current)],
+			                                        CALCULATETABLE(VALUES(DIM_DATE[DATE_ACTUAL]),
+			                                        USERELATIONSHIP(DIM_DATE[DATE_ACTUAL],
+			                                        'DIM_DATE (2)'[DATE_ACTUAL]),
+			                                        REMOVEFILTERS(DIM_DATE[DATE_ACTUAL]))),
+			    MeasureSelectionTime = "Year to Date", CALCULATE([Volume Rail Lifts (Current)],DATEADD(DIM_DATE[DATE_ACTUAL],-1,YEAR))
+			)
+		formatString: #,0
+		displayFolder: Volume
+		lineageTag: dadc0467-6b99-4cf4-b40f-0c8679ead6a0
+
+		annotation PBI_FormatHint = {"isDecimal":true}
+
+	measure 'Volume Auto Budget' =
+			
+			CALCULATE(
+			    SUM('GOLD_FINANCE_METRICS'[METRIC_VALUE]),
+			    'GOLD_FINANCE_METRICS'[METRIC]="Autos",
+			GOLD_FINANCE_METRICS[METRIC_GROUP]="Budget")
+		displayFolder: Volume
+		lineageTag: 5b13d292-a99d-45e0-ad35-42070701a69d
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Volume CFS Budget' =
+			
+			CALCULATE(
+			    SUM('GOLD_FINANCE_METRICS'[METRIC_VALUE]),
+			    'GOLD_FINANCE_METRICS'[METRIC]="CFS",
+			GOLD_FINANCE_METRICS[METRIC_GROUP]="Budget")
+		displayFolder: Volume
+		lineageTag: 66b89100-ab8b-40e6-9581-32a6499352cb
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Volume Container Moves Budget' =
+			
+			CALCULATE(
+			    SUM('GOLD_FINANCE_METRICS'[METRIC_VALUE]),
+			    'GOLD_FINANCE_METRICS'[METRIC]="Container Moves",
+			GOLD_FINANCE_METRICS[METRIC_GROUP]="Budget")
+		displayFolder: Volume
+		lineageTag: b8f0e9f2-3097-401e-ae4f-965e11e557c4
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Volume Cruise Passenger Budget' =
+			
+			CALCULATE(
+			    SUM('GOLD_FINANCE_METRICS'[METRIC_VALUE]),
+			    'GOLD_FINANCE_METRICS'[METRIC]="Cruise Passenger",
+			GOLD_FINANCE_METRICS[METRIC_GROUP]="Budget")
+		displayFolder: Volume
+		lineageTag: cebc68e0-b68a-4528-9fc4-2b023995a67e
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Volume Rail Lifts Budget' =
+			
+			CALCULATE(
+			    SUM('GOLD_FINANCE_METRICS'[METRIC_VALUE]),
+			    'GOLD_FINANCE_METRICS'[METRIC]="Rail Lifts",
+			GOLD_FINANCE_METRICS[METRIC_GROUP]="Budget")
+		displayFolder: Volume
+		lineageTag: 051b6c1c-7905-47e0-82cd-27fe6edc07e3
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Volume Auto (%)' = ```
+			
+			
+			 CALCULATE(
+			    DIVIDE(([Volume Auto (Current)]-[Volume Auto (Comparison)]),
+			    abs([Volume Auto (Comparison)])))
+			```
+		formatString: 0\ %;-0\ %;0\ %
+		displayFolder: Volume
+		lineageTag: e2709594-643c-4ba2-97a2-33f2a2e9cd86
+
+	measure 'Volume CFS (%)' = ```
+			
+			
+			 CALCULATE(
+			    DIVIDE(([Volume CFS (Current)]-[Volume CFS (Comparison)]),
+			    abs([Volume CFS (Comparison)])))
+			```
+		formatString: 0\ %;-0\ %;0\ %
+		displayFolder: Volume
+		lineageTag: f9cc338b-b084-4619-b940-7f49cc9b0290
+
+	measure 'Volume Container Moves (%)' = ```
+			
+			
+			 CALCULATE(
+			    DIVIDE(([Volume Container Moves (Current)]-[Volume Container Moves (Comparison)]),
+			    abs([Volume Container Moves (Comparison)])))
+			```
+		formatString: 0\ %;-0\ %;0\ %
+		displayFolder: Volume
+		lineageTag: dd606310-9332-4783-9a15-3cef08ebf70b
+
+	measure 'Volume Cruise Passenger (%)' = ```
+			
+			
+			 CALCULATE(
+			    DIVIDE(([Volume Cruise Passenger (Current)]-[Volume Cruise Passenger (Comparison)]),
+			    abs([Volume Cruise Passenger (Comparison)])))
+			```
+		formatString: #,0\ %;-#,0\ %;#,0\ %
+		displayFolder: Volume
+		lineageTag: 6ea7387c-9c28-4a9a-a0e7-959377c33514
+
+	measure 'Volume Rail Lifts (%)' = ```
+			
+			
+			 CALCULATE(
+			    DIVIDE(([Volume Rail Lifts (Current)]-[Volume Rail Lifts (Comparison)]),
+			    abs([Volume Rail Lifts (Comparison)])))
+			```
+		formatString: 0\ %;-0\ %;0\ %
+		displayFolder: Volume
+		lineageTag: 15ba0952-ba84-46b5-bd53-4a16cbddae23
+
+	measure 'Title Volume' = CONCATENATE("Volume ", SELECTEDVALUE(GOLD_FINANCE_METRICS[METRIC]))
+		lineageTag: b574247b-2657-46cf-997c-cdd7ce43c6de
+
+	measure 'SUM METRIC VALUE' = SUM(GOLD_FINANCE_METRICS[METRIC_VALUE])
+		displayFolder: Metrics aggregated
+		lineageTag: c20eec4a-bbe5-40df-b2cd-66fdce502a04
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure CFS =
+			
+			CALCULATE(
+			        SUM('GOLD_FINANCE_METRICS'[METRIC_VALUE]),
+			        'GOLD_FINANCE_METRICS'[METRIC]="CFS")
+		displayFolder: Volume
+		lineageTag: 1d8abb20-0ebc-41cc-a359-a41e8b3908ca
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Title Volume (Metric)' = IF( SELECTEDVALUE(GOLD_FINANCE_METRICS[METRIC])=BLANK(), "Volume",SELECTEDVALUE(GOLD_FINANCE_METRICS[METRIC]))
+		lineageTag: acb09658-c727-47cf-b8ea-5a5c8b1e2f12
+
+	measure 'Metrics Volume (Budget)' =
+			
+			
+			CALCULATE(SUM('GOLD_FINANCE_METRICS'[METRIC_VALUE]),'GOLD_FINANCE_METRICS'[METRIC_GROUP]="Budget")
+		formatString: #,0
+		displayFolder: Metrics aggregated
+		lineageTag: f4c038c7-9bc5-4e28-a06d-3a92005c8e3f
+
+		annotation PBI_FormatHint = {"isDecimal":true}
+
+	measure 'Metrics Volume (Current Period)' = ```
+			
+			
+			    CALCULATE(
+			        SUM('GOLD_FINANCE_METRICS'[METRIC_VALUE]),
+			        'GOLD_FINANCE_METRICS'[METRIC_GROUP]="Actual")
+			
+			```
+		formatString: #,0
+		displayFolder: Metrics aggregated
+		lineageTag: 1700b03f-d097-4696-912a-d58b478767df
+
+		annotation PBI_FormatHint = {"isDecimal":true}
+
+	measure 'Metrics Volume (Comparison)' =
+			
+			VAR MeasureSelectionTime = ALLSELECTED('Measure Selection Time Comparison'[Measure Selection])
+			VAR MeasureSelectionProRata = "Actual"
+			
+			RETURN
+			SWITCH(TRUE(),
+			    MeasureSelectionTime = "Budget" && MeasureSelectionProRata = "Gross", CALCULATE([Metrics Volume (Budget)],DATEADD(DIM_DATE[DATE_ACTUAL],-1,YEAR)),
+			    MeasureSelectionTime = "Budget" && MeasureSelectionProRata = "Pro-Rata",CALCULATE([Metrics Volume (Budget)],DATEADD(DIM_DATE[DATE_ACTUAL],-1,YEAR)),
+			    MeasureSelectionTime = "Prior Year", CALCULATE([Metrics Volume (Current Period)],DATEADD(DIM_DATE[DATE_ACTUAL],-1,YEAR)),
+			    MeasureSelectionTime = "Prior Month", CALCULATE([Metrics Volume (Current Period)],DATEADD(DIM_DATE[DATE_ACTUAL],-1,MONTH)),
+			    MeasureSelectionTime = "Custom", CALCULATE([Metrics Volume (Current Period)],
+			                                        CALCULATETABLE(VALUES(DIM_DATE[DATE_ACTUAL]),
+			                                        USERELATIONSHIP(DIM_DATE[DATE_ACTUAL],
+			                                        'DIM_DATE (2)'[DATE_ACTUAL]),
+			                                        REMOVEFILTERS(DIM_DATE[DATE_ACTUAL]))),
+			    MeasureSelectionTime = "Year to Date", CALCULATE([Metrics Volume (Current Period)],DATEADD(DIM_DATE[DATE_ACTUAL],-1,YEAR))
+			)
+		formatString: #,0
+		displayFolder: Metrics aggregated
+		lineageTag: 7c53c732-d245-4c74-9d2e-5addb12bee56
+
+		annotation PBI_FormatHint = {"isDecimal":true}
+
+	measure SelectedValue_Finance = SELECTEDVALUE(GOLD_FINANCE_METRICS[METRIC])
+		lineageTag: 185a5c67-2518-4a60-8d08-68356bc86e36
+
+	measure 'Volume_Label (Current)' = ```
+			
+			
+			
+			SWITCH(
+			    SELECTEDVALUE('VOLUME PARAMETER'[VOLUME PARAMETER]),
+			    "Autos", [Volume Auto (Current)],
+			    "CFS", [Volume CFS (Current)],
+			    BLANK()
+			)
+			
+			
+			```
+		displayFolder: Volume
+		lineageTag: 831514b7-9043-4af2-b4b0-7ead9584da74
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure Volume_label =
+			
+			SELECTEDVALUE('VOLUME PARAMETER'[VOLUME PARAMETER],"Metric")
+		displayFolder: Volume
+		lineageTag: 2d07b5b7-4fcc-49cf-b41e-ae4731b7ce17
+
+	measure SelectedValue_Finance% = [SelectedValue_Finance]&" %"
+		lineageTag: 174aa382-9708-46d1-b63f-ae09a5c22df9
+
+	measure 'Indirect Cost (Current Period)' =
+			
+			VAR MeasureSelectionProRata = SELECTEDVALUE('Measure Selection ProRata_Budget'[Measure Selection])
+			
+			RETURN
+			    CALCULATE(
+			        SUM('GOLD_FINANCE_METRICS'[METRIC_VALUE]),
+			        'GOLD_FINANCE_METRICS'[METRIC]="Indirect Costs",
+			        'GOLD_FINANCE_METRICS'[METRIC_GROUP]=SELECTEDVALUE('Measure Selection ProRata_Budget'[Translate])
+			    )
+		formatString: #,0
+		displayFolder: Indirect Cost
+		lineageTag: ce56272f-0df1-4afa-aaa7-d2b4be9b07f6
+
+		annotation PBI_FormatHint = {"isDecimal":true}
+
+	measure 'Indirect Cost Budget' = ```
+			
+			
+			 IF(SELECTEDVALUE('Measure Selection ProRata_Budget'[Measure Selection])="Gross",
+			  CALCULATE(
+			    SUM('GOLD_FINANCE_METRICS'[METRIC_VALUE]), 
+			    'GOLD_FINANCE_METRICS'[METRIC] = "Indirect Costs",
+			    'GOLD_FINANCE_METRICS'[METRIC_GROUP]="Budget"),
+			CALCULATE(
+			    SUM('GOLD_FINANCE_METRICS'[METRIC_VALUE]), 
+			    'GOLD_FINANCE_METRICS'[METRIC] = "Indirect Costs",
+			    'GOLD_FINANCE_METRICS'[METRIC_GROUP]="Budget-Pro-Rata")
+			)
+			```
+		displayFolder: Indirect Cost
+		lineageTag: 965dc00d-9d7e-403a-9d61-db46662f5a0a
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Indirect Cost (Prior Period)' =
+			
+			VAR MeasureSelectionTime = ALLSELECTED('Measure Selection Time Comparison'[Measure Selection])
+			VAR MeasureSelectionProRata = ALLSELECTED('Measure Selection ProRata_Budget'[Measure Selection])
+			
+			RETURN
+			SWITCH(TRUE(),
+			    MeasureSelectionTime = "Budget" && MeasureSelectionProRata = "Gross", [Indirect Cost Budget],
+			    MeasureSelectionTime = "Budget" && MeasureSelectionProRata = "Pro-Rata",[Indirect Cost Budget-Pro-Rata],
+			    MeasureSelectionTime = "Prior Year", CALCULATE([Indirect Cost (Current Period)],DATEADD(DIM_DATE[DATE_ACTUAL],-1,YEAR)),
+			    MeasureSelectionTime = "Prior Month", CALCULATE([Indirect Cost (Current Period)],DATEADD(DIM_DATE[DATE_ACTUAL],-1,MONTH)),
+			    MeasureSelectionTime = "Custom", [Indirect Cost (Current Period)],
+			    MeasureSelectionTime = "Year to Date", CALCULATE([Indirect Cost (Current Period)],DATEADD(DIM_DATE[DATE_ACTUAL],-1,YEAR))
+			)
+		formatString: #,0
+		displayFolder: Indirect Cost
+		lineageTag: 93650ad4-1210-44be-897c-723261d53c30
+
+		annotation PBI_FormatHint = {"isDecimal":true}
+
+	measure 'Indirect Cost Budget-Pro-Rata' = ```
+			
+			CALCULATE(
+			    SUM('GOLD_FINANCE_METRICS'[METRIC_VALUE]), 
+			    'GOLD_FINANCE_METRICS'[METRIC] = "Indrect Costs",
+			    'GOLD_FINANCE_METRICS'[METRIC_GROUP]="Budget-Pro-Rata"
+			    )
+			```
+		displayFolder: Indirect Cost
+		lineageTag: 3ec15722-f427-474c-ac52-82640775745c
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Indirect Cost Custom' =
+			
+			IF(MONTH([MAX Selected Dates])<=MONTH([MAX Selected Dates (2)]),
+			                CALCULATE([Indirect Cost (Current Period)],
+			                (DATEADD(DIM_DATE[DATE_ACTUAL],[Period Year Custom],YEAR))),
+			                BLANK())
+		displayFolder: Indirect Cost
+		lineageTag: 63af1c17-36cb-4364-b545-0f2ffdf70a65
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Indirect Cost (%)' = ```
+			
+			
+			 CALCULATE(
+			    DIVIDE(([Indirect Cost (Current Period)]-[Indirect Cost (Comparison)]),
+			    abs([Indirect Cost (Comparison)])))
+			```
+		formatString: 0\ %;-0\ %;0\ %
+		displayFolder: Indirect Cost
+		lineageTag: 19d34176-7359-45ad-848f-f05491867244
+
+	measure 'Indirect Cost (Comparison)' =
+			
+			VAR MeasureSelectionTime = ALLSELECTED('Measure Selection Time Comparison'[Measure Selection])
+			VAR MeasureSelectionProRata = ALLSELECTED('Measure Selection ProRata_Budget'[Measure Selection])
+			
+			RETURN
+			SWITCH(TRUE(),
+			    MeasureSelectionTime = "Budget" && MeasureSelectionProRata = "Gross", [Indirect Cost Budget],
+			    MeasureSelectionTime = "Budget" && MeasureSelectionProRata = "Pro-Rata",[Indirect Cost (Prior Period)],
+			    MeasureSelectionTime = "Prior Year", CALCULATE([Indirect Cost (Current Period)],DATEADD(DIM_DATE[DATE_ACTUAL],-1,YEAR)),
+			    MeasureSelectionTime = "Prior Month", CALCULATE([Indirect Cost (Current Period)],DATEADD(DIM_DATE[DATE_ACTUAL],-1,MONTH)),
+			    MeasureSelectionTime = "Custom", CALCULATE([Indirect Cost (Current Period)],
+			                                        CALCULATETABLE(VALUES(DIM_DATE[DATE_ACTUAL]),
+			                                        USERELATIONSHIP(DIM_DATE[DATE_ACTUAL],
+			                                        'DIM_DATE (2)'[DATE_ACTUAL]),
+			                                        REMOVEFILTERS(DIM_DATE[DATE_ACTUAL]))),
+			    MeasureSelectionTime = "Year to Date", CALCULATE([Indirect Cost (Current Period)],DATEADD(DIM_DATE[DATE_ACTUAL],-1,YEAR))
+			)
+		displayFolder: Indirect Cost
+		lineageTag: ce2a68e8-4a41-482b-b3d3-56e69ca930a3
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Total Cost (MAX)' = ```
+			
+			
+			VAR MeasureSelectionProRata = SELECTEDVALUE('Measure Selection ProRata_Budget'[Measure Selection])
+			RETURN
+			CALCULATE(
+			    MAXX(
+			        VALUES('GOLD_FINANCE_METRICS'[CALENDAR_MONTH]), 
+			        CALCULATE(
+			            SUM('GOLD_FINANCE_METRICS'[METRIC_VALUE]),
+			            'GOLD_FINANCE_METRICS'[METRIC] = "Total Costs",
+			            'GOLD_FINANCE_METRICS'[METRIC_GROUP]=SELECTEDVALUE('Measure Selection ProRata_Budget'[Translate])
+			        )
+			    )
+			)
+			
+			
+			```
+		displayFolder: Total Cost
+		lineageTag: ffdb5c8d-99ac-4efd-af73-4113918a38f8
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Contribution Margin(Current Period)' = ```
+			
+			VAR MeasureSelectionProRata = SELECTEDVALUE('Measure Selection ProRata_Budget'[Measure Selection])
+			
+			RETURN
+			    CALCULATE(
+			        SUM('GOLD_FINANCE_METRICS'[METRIC_VALUE]),
+			        'GOLD_FINANCE_METRICS'[METRIC]="Contribution margin",
+			        'GOLD_FINANCE_METRICS'[METRIC_GROUP]=SELECTEDVALUE('Measure Selection ProRata_Budget'[Translate])
+			    )
+			
+			```
+		formatString: #,0
+		displayFolder: Contribution Margin
+		lineageTag: b52d52d8-bc69-434e-9013-686e8c1bee5f
+
+		annotation PBI_FormatHint = {"isDecimal":true}
+
+	measure 'Contribution Margin Budget' = ```
+			
+			
+			 IF(SELECTEDVALUE('Measure Selection ProRata_Budget'[Measure Selection])="Gross",
+			  CALCULATE(
+			    SUM('GOLD_FINANCE_METRICS'[METRIC_VALUE]), 
+			    'GOLD_FINANCE_METRICS'[METRIC] = "Contribution margin",
+			    'GOLD_FINANCE_METRICS'[METRIC_GROUP]="Budget"),
+			CALCULATE(
+			    SUM('GOLD_FINANCE_METRICS'[METRIC_VALUE]), 
+			    'GOLD_FINANCE_METRICS'[METRIC] = "Contribution margin",
+			    'GOLD_FINANCE_METRICS'[METRIC_GROUP]="Budget-Pro-Rata")
+			)
+			```
+		formatString: #,0
+		displayFolder: Contribution Margin
+		lineageTag: 7e7a9a34-ad81-4bc4-819d-f01f0a2e3462
+
+		annotation PBI_FormatHint = {"isDecimal":true}
+
+	measure 'Contribution Margin Budget-Pro-Rata' = ```
+			
+			CALCULATE(
+			    SUM('GOLD_FINANCE_METRICS'[METRIC_VALUE]), 
+			    'GOLD_FINANCE_METRICS'[METRIC] = "Contribution margin",
+			    'GOLD_FINANCE_METRICS'[METRIC_GROUP]="Budget-Pro-Rata"
+			    )
+			```
+		formatString: #,0
+		displayFolder: Contribution Margin
+		lineageTag: 9492d17d-962f-40f0-bb61-8e1a9cf1f7eb
+
+		annotation PBI_FormatHint = {"isDecimal":true}
+
+	measure 'Contribution Margin (Comparison)' =
+			
+			VAR MeasureSelectionTime = ALLSELECTED('Measure Selection Time Comparison'[Measure Selection])
+			VAR MeasureSelectionProRata = ALLSELECTED('Measure Selection ProRata_Budget'[Measure Selection])
+			
+			RETURN
+			SWITCH(TRUE(),
+			    MeasureSelectionTime = "Budget" && MeasureSelectionProRata = "Gross", [Contribution Margin Budget],
+			    MeasureSelectionTime = "Budget" && MeasureSelectionProRata = "Pro-Rata",[Contribution Margin Budget-Pro-Rata],
+			    MeasureSelectionTime = "Prior Year", CALCULATE([Contribution Margin(Current Period)],DATEADD(DIM_DATE[DATE_ACTUAL],-1,YEAR)),
+			    MeasureSelectionTime = "Prior Month", CALCULATE([Contribution Margin(Current Period)],DATEADD(DIM_DATE[DATE_ACTUAL],-1,MONTH)),
+			    MeasureSelectionTime = "Custom", CALCULATE([Contribution Margin(Current Period)],
+			                                        CALCULATETABLE(VALUES(DIM_DATE[DATE_ACTUAL]),
+			                                        USERELATIONSHIP(DIM_DATE[DATE_ACTUAL],
+			                                        'DIM_DATE (2)'[DATE_ACTUAL]),
+			                                        REMOVEFILTERS(DIM_DATE[DATE_ACTUAL]))),
+			    MeasureSelectionTime = "Year to Date", CALCULATE([Contribution Margin(Current Period)],DATEADD(DIM_DATE[DATE_ACTUAL],-1,YEAR))
+			)
+		formatString: #,0
+		displayFolder: Contribution Margin
+		lineageTag: 10c3f5ca-459d-47e8-bd16-2c89eee84f18
+
+		annotation PBI_FormatHint = {"isDecimal":true}
+
+	measure 'Contribution Margin (%)' = ```
+			
+			
+			 CALCULATE(
+			    DIVIDE(([Contribution Margin(Current Period)]-[Contribution Margin (Comparison)]),
+			    abs([Contribution Margin (Comparison)])))
+			```
+		formatString: 0\ %;-0\ %;0\ %
+		displayFolder: Contribution Margin
+		lineageTag: 8ad2db5f-5984-4bd0-81ca-f3a7f75342e6
+
+	measure 'Contribution Margin (Prior Period)' =
+			
+			VAR MeasureSelectionTime = ALLSELECTED('Measure Selection Time Comparison'[Measure Selection])
+			VAR MeasureSelectionProRata = ALLSELECTED('Measure Selection ProRata_Budget'[Measure Selection])
+			
+			RETURN
+			SWITCH(TRUE(),
+			    MeasureSelectionTime = "Budget" && MeasureSelectionProRata = "Gross", [Contribution Margin Budget],
+			    MeasureSelectionTime = "Budget" && MeasureSelectionProRata = "Pro-Rata",[Contribution Margin Budget-Pro-Rata],
+			    MeasureSelectionTime = "Prior Year", CALCULATE([Contribution Margin(Current Period)],DATEADD(DIM_DATE[DATE_ACTUAL],-1,YEAR)),
+			    MeasureSelectionTime = "Prior Month", CALCULATE([Contribution Margin(Current Period)],DATEADD(DIM_DATE[DATE_ACTUAL],-1,MONTH)),
+			    MeasureSelectionTime = "Custom", [Contribution Margin Custom],
+			    MeasureSelectionTime = "Year to Date", CALCULATE([Contribution Margin(Current Period)],DATEADD(DIM_DATE[DATE_ACTUAL],-1,YEAR))
+			)
+		displayFolder: Contribution Margin
+		lineageTag: b98a133a-5e0b-4288-a624-6db739a5c28d
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Contribution Margin Custom' =
+			
+			IF(MONTH([MAX Selected Dates])<=MONTH([MAX Selected Dates (2)]),
+			                CALCULATE([Contribution Margin(Current Period)],
+			                (DATEADD(DIM_DATE[DATE_ACTUAL],[Period Year Custom],YEAR))),
+			                BLANK())
+		displayFolder: Contribution Margin
+		lineageTag: 442f239f-cc23-45d1-87c7-b24069ed3c52
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Volume Selection' = ```
+			
+			
+			VAR MeasureSelectionVolume = SELECTEDVALUE(GOLD_FINANCE_METRICS[METRIC])
+			
+			RETURN
+			SWITCH(
+			    TRUE(),
+			    MeasureSelectionVolume = "Autos", CALCULATE([Volume Auto (Current)], ALL('GOLD_FINANCE_METRICS'[EXECUTIVE_GROUP])),
+			    MeasureSelectionVolume = "CFS", CALCULATE([Volume CFS (Current)], ALL('GOLD_FINANCE_METRICS'[EXECUTIVE_GROUP])),
+			    MeasureSelectionVolume = "Container Moves", CALCULATE([Volume Container Moves (Current)], ALL('GOLD_FINANCE_METRICS'[EXECUTIVE_GROUP])),
+			    MeasureSelectionVolume = "Cruise Passenger", CALCULATE([Volume Cruise Passenger (Current)], ALL('GOLD_FINANCE_METRICS'[EXECUTIVE_GROUP])),
+			    MeasureSelectionVolume = "Rails Lifts", CALCULATE([Volume Rail Lifts (Current)], ALL('GOLD_FINANCE_METRICS'[EXECUTIVE_GROUP]))
+			)
+			
+			
+			```
+		formatString: #,0
+		displayFolder: Volume
+		lineageTag: 865f2461-9c06-4561-92ea-72034eb68b36
+
+		annotation PBI_FormatHint = {"isDecimal":true}
+
+	column FINANCE_METRIC_KEY
+		dataType: string
+		sourceProviderType: nvarchar(16777216)
+		lineageTag: c38c9b07-fce4-4d68-89f4-ca85826b3bac
+		summarizeBy: none
+		sourceColumn: FINANCE_METRIC_KEY
+
+		annotation SummarizationSetBy = Automatic
+
+	column ACCOUNT_EXTRACT_TYPE_KEY
+		dataType: string
+		isHidden
+		sourceProviderType: nvarchar(32)
+		lineageTag: f4b5f7b7-a39c-4dd9-a3dd-72da118db335
+		summarizeBy: none
+		sourceColumn: ACCOUNT_EXTRACT_TYPE_KEY
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column TERMINAL_KEY
+		dataType: string
+		sourceProviderType: nvarchar(16777216)
+		displayFolder: Terminals
+		lineageTag: 6ca69d52-f696-448d-8740-6dcbdbc92c34
+		summarizeBy: none
+		sourceColumn: TERMINAL_KEY
+
+		annotation SummarizationSetBy = Automatic
+
+	column HYPERION_TERMINAL_ENTITY_ID
+		dataType: string
+		sourceProviderType: nvarchar(16777216)
+		displayFolder: Terminals
+		lineageTag: 988e307b-2baf-4794-8132-43dbef0d3f58
+		summarizeBy: none
+		sourceColumn: HYPERION_TERMINAL_ENTITY_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column ACCOUNT_ID
+		dataType: string
+		sourceProviderType: nvarchar(16777216)
+		lineageTag: 2e911f09-5630-461e-a2fe-cba7459ec4a6
+		summarizeBy: none
+		sourceColumn: ACCOUNT_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column ENTITY_ID
+		dataType: string
+		sourceProviderType: nvarchar(16777216)
+		lineageTag: 09cc3fce-ff3b-45d7-8d92-f1ebb617aa08
+		summarizeBy: none
+		sourceColumn: ENTITY_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column YEAR_KEY
+		dataType: string
+		sourceProviderType: nvarchar(16777216)
+		lineageTag: 94755dfa-2a84-4b69-8d6b-5d038545003e
+		summarizeBy: none
+		sourceColumn: YEAR_KEY
+
+		annotation SummarizationSetBy = Automatic
+
+	column MONTH_KEY
+		dataType: string
+		sourceProviderType: nvarchar(16777216)
+		lineageTag: 2fb201d1-a1a4-40b4-8410-c516b350b37b
+		summarizeBy: none
+		sourceColumn: MONTH_KEY
+
+		annotation SummarizationSetBy = Automatic
+
+	column CALENDAR_MONTH
+		dataType: dateTime
+		formatString: Long Date
+		sourceProviderType: date
+		lineageTag: 2f6f1be1-3beb-46a3-ad58-b0224ac171f6
+		summarizeBy: none
+		sourceColumn: CALENDAR_MONTH
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column FISCAL_MONTH
+		dataType: dateTime
+		formatString: Long Date
+		sourceProviderType: date
+		lineageTag: fa7cd5b4-3862-4207-a600-60b9272772cd
+		summarizeBy: none
+		sourceColumn: FISCAL_MONTH
+
+		variation Variation
+			isDefault
+			relationship: a5dd0be5-c363-4225-952b-12819b100bc3
+			defaultHierarchy: LocalDateTable_617071d0-8911-482b-98f3-688913144df7.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column ACCOUNT_ALIAS_DEFAULT
+		dataType: string
+		sourceProviderType: nvarchar(16777216)
+		lineageTag: f1df53b9-d787-4a6c-a279-3e4d49c6ab0b
+		summarizeBy: none
+		sourceColumn: ACCOUNT_ALIAS_DEFAULT
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column ENTITY_ALIAS_DEFAULT
+		dataType: string
+		sourceProviderType: nvarchar(16777216)
+		lineageTag: f1f86a4f-4ca3-47d0-b932-5d879ec75513
+		summarizeBy: none
+		sourceColumn: ENTITY_ALIAS_DEFAULT
+
+		annotation SummarizationSetBy = Automatic
+
+	column METRIC_GROUP
+		dataType: string
+		sourceProviderType: nvarchar(16777216)
+		displayFolder: Metrics aggregated
+		lineageTag: e89148e9-e2be-4a48-9b39-56b5b18b9415
+		summarizeBy: none
+		sourceColumn: METRIC_GROUP
+
+		annotation SummarizationSetBy = Automatic
+
+	column METRIC
+		dataType: string
+		sourceProviderType: nvarchar(19)
+		displayFolder: Metrics aggregated
+		lineageTag: d3922b45-85ce-4c4d-af3d-ee314cebfa03
+		summarizeBy: none
+		sourceColumn: METRIC
+		sortByColumn: STEP
+
+		changedProperty = SortByColumn
+
+		annotation SummarizationSetBy = Automatic
+
+	column STEP
+		dataType: double
+		isHidden
+		sourceProviderType: decimal(1, 0)
+		lineageTag: c91e399c-41e0-4ee7-b75b-a20a95ac44fa
+		summarizeBy: sum
+		sourceColumn: STEP
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column METRIC_VALUE
+		dataType: double
+		formatString: \$#,0;(\$#,0);\$#,0
+		sourceProviderType: decimal(38, 5)
+		displayFolder: Metrics aggregated
+		lineageTag: 0ca36b35-5c33-45b8-84bd-e3bef1800758
+		summarizeBy: sum
+		sourceColumn: METRIC_VALUE
+
+		annotation SummarizationSetBy = Automatic
+
+	column TERMINAL_COUNTRY
+		dataType: string
+		sourceProviderType: nvarchar(16777216)
+		displayFolder: Terminals
+		lineageTag: 1c2f769f-80d4-4f1d-8e63-296eefd774d4
+		summarizeBy: none
+		sourceColumn: TERMINAL_COUNTRY
+
+		annotation SummarizationSetBy = Automatic
+
+	column TERMINAL_REGION
+		dataType: string
+		sourceProviderType: nvarchar(16777216)
+		displayFolder: Terminals
+		lineageTag: 662773a1-e213-4947-880b-ebd21bff55fd
+		summarizeBy: none
+		sourceColumn: TERMINAL_REGION
+
+		annotation SummarizationSetBy = Automatic
+
+	column HIERARCHY_TYPE
+		dataType: string
+		sourceProviderType: nvarchar(16777216)
+		lineageTag: e94e2609-b487-4226-8f03-d1d67cf9f1f8
+		summarizeBy: none
+		sourceColumn: HIERARCHY_TYPE
+
+		annotation SummarizationSetBy = Automatic
+
+	column EXECUTIVE_GROUP
+		dataType: string
+		sourceProviderType: nvarchar(16777216)
+		lineageTag: eda58fd4-a9f0-4969-9e73-9f2afa4437c2
+		summarizeBy: none
+		sourceColumn: EXECUTIVE_GROUP
+
+		annotation SummarizationSetBy = Automatic
+
+	column EXECUTIVE_SUB_GROUP
+		dataType: string
+		sourceProviderType: nvarchar(16777216)
+		lineageTag: ea6763f8-e244-4147-871c-f3a4a76efde5
+		summarizeBy: none
+		sourceColumn: EXECUTIVE_SUB_GROUP
+
+		annotation SummarizationSetBy = Automatic
+
+	column EXECUTIVE_LEVEL_THREE
+		dataType: string
+		sourceProviderType: nvarchar(16777216)
+		lineageTag: d8ee1892-a26e-4898-bc00-8287a8705233
+		summarizeBy: none
+		sourceColumn: EXECUTIVE_LEVEL_THREE
+
+		annotation SummarizationSetBy = Automatic
+
+	column BOD_3
+		dataType: string
+		sourceProviderType: nvarchar(16777216)
+		lineageTag: 3974da66-a0b1-40f8-9903-69b3a4620361
+		summarizeBy: none
+		sourceColumn: BOD_3
+
+		annotation SummarizationSetBy = Automatic
+
+	column EXECUTIVE_RESPONSIBILITY
+		dataType: string
+		sourceProviderType: nvarchar(16777216)
+		lineageTag: d6f21f60-b5e4-4ad7-ac1f-b6649dbabde6
+		summarizeBy: none
+		sourceColumn: EXECUTIVE_RESPONSIBILITY
+
+		annotation SummarizationSetBy = Automatic
+
+	column METRIC_DOMAIN
+		dataType: string
+		sourceProviderType: nvarchar(16777216)
+		lineageTag: 890733cd-f886-4b7b-91b8-537d46dc564d
+		summarizeBy: none
+		sourceColumn: METRIC_DOMAIN
+
+		annotation SummarizationSetBy = Automatic
+
+	column EXECUTIVE_GROUP_HIERARCHY
+		dataType: string
+		lineageTag: 9d252638-97d9-4e77-a081-1013b74e536c
+		summarizeBy: none
+		sourceColumn: EXECUTIVE_GROUP_HIERARCHY
+
+		annotation SummarizationSetBy = Automatic
+
+	partition GOLD_FINANCE_METRICS = m
+		mode: import
+		source =
+				let
+				    Source = Snowflake.Databases("carrix.snowflakecomputing.com","PBI_WH",[Role="ANALYTICS_DEVELOPER"]),
+				    GOLD_Database = Source{[Name="GOLD",Kind="Database"]}[Data],
+				    FINANCE_Schema = GOLD_Database{[Name="FINANCE",Kind="Schema"]}[Data],
+				    GOLD_FINANCE_METRICS_Table = FINANCE_Schema{[Name="GOLD_FINANCE_METRICS",Kind="Table"]}[Data],
+				    #"Removed Columns" = Table.RemoveColumns(GOLD_FINANCE_METRICS_Table,{"SILVER_METADATA"}),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Removed Columns",{{"CALENDAR_MONTH", type date}}),
+				    #"Filtered Rows" = Table.SelectRows(#"Changed Type", each ([HIERARCHY_TYPE] = "Banking"))
+				in
+				    #"Filtered Rows"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

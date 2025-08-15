@@ -1,0 +1,219 @@
+table GOLD_TERMINALS
+	lineageTag: 0b4323eb-b655-4335-a844-81ef3fe929ff
+
+	column TERMINAL_KEY
+		dataType: string
+		sourceProviderType: nvarchar(16777216)
+		lineageTag: 9e4b4a2a-ec0e-444f-a3cb-a26755cbcdd7
+		summarizeBy: none
+		sourceColumn: TERMINAL_KEY
+
+		annotation SummarizationSetBy = Automatic
+
+	column TERMINAL_CITY
+		dataType: string
+		sourceProviderType: nvarchar(16777216)
+		lineageTag: 2c93eb19-6994-4593-a8ab-a881121cbc4d
+		summarizeBy: none
+		sourceColumn: TERMINAL_CITY
+
+		annotation SummarizationSetBy = Automatic
+
+	column TERMINAL_COUNTRY
+		dataType: string
+		sourceProviderType: nvarchar(16777216)
+		lineageTag: f6ea4662-f125-492e-a673-0ce82505f5d0
+		summarizeBy: none
+		sourceColumn: TERMINAL_COUNTRY
+
+		annotation SummarizationSetBy = Automatic
+
+	column TERMINAL_REGION
+		dataType: string
+		sourceProviderType: nvarchar(16777216)
+		lineageTag: 16b85468-bfc4-422a-9520-aae543b75d0f
+		summarizeBy: none
+		sourceColumn: TERMINAL_REGION
+
+		annotation SummarizationSetBy = Automatic
+
+	column COLOR
+		dataType: string
+		isNullable: false
+		sourceProviderType: nvarchar(max)
+		lineageTag: 94f944e2-69e7-4c98-8894-e687799d0bdf
+		summarizeBy: none
+		sourceColumn: COLOR
+
+		annotation SummarizationSetBy = Automatic
+
+	column COMPANY
+		dataType: string
+		sourceProviderType: nvarchar(16777216)
+		lineageTag: 24e3cd65-4c25-4c3a-87f8-f4b16b1bb5df
+		summarizeBy: none
+		sourceColumn: COMPANY
+
+		annotation SummarizationSetBy = Automatic
+
+	column LOCATION_NAME
+		dataType: string
+		sourceProviderType: nvarchar(16777216)
+		lineageTag: 503a75a7-018b-4b6c-ae6b-ea1dc6d36c8b
+		summarizeBy: none
+		sourceColumn: LOCATION_NAME
+
+		annotation SummarizationSetBy = Automatic
+
+	column WEBSITE
+		dataType: string
+		sourceProviderType: nvarchar(16777216)
+		lineageTag: 528208b4-ee6b-46bd-bf6f-feb969a0c0fb
+		summarizeBy: none
+		sourceColumn: WEBSITE
+
+		annotation SummarizationSetBy = Automatic
+
+	column OFFICE_ADDRESS
+		dataType: string
+		sourceProviderType: nvarchar(16777216)
+		lineageTag: 07d14b6c-d5fe-4214-bb58-94a2a4aa412f
+		summarizeBy: none
+		sourceColumn: OFFICE_ADDRESS
+
+		annotation SummarizationSetBy = Automatic
+
+	column OFFICE_CITY
+		dataType: string
+		sourceProviderType: nvarchar(16777216)
+		lineageTag: 3ce3771d-9b0f-46df-94e8-1efceb7b3f60
+		summarizeBy: none
+		sourceColumn: OFFICE_CITY
+
+		annotation SummarizationSetBy = Automatic
+
+	column OFFICE_STATE
+		dataType: string
+		sourceProviderType: nvarchar(16777216)
+		lineageTag: 9e9024db-8c94-4bcd-a8d0-cf6d288e31b0
+		summarizeBy: none
+		sourceColumn: OFFICE_STATE
+
+		annotation SummarizationSetBy = Automatic
+
+	column OFFICE_ZIP_CODE
+		dataType: double
+		sourceProviderType: decimal(38, 0)
+		lineageTag: 384e91dd-bd8f-45a4-af69-d17e3cfd49be
+		summarizeBy: none
+		sourceColumn: OFFICE_ZIP_CODE
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column OFFICE_COUNTRY
+		dataType: string
+		sourceProviderType: nvarchar(16777216)
+		lineageTag: ac9f8395-afc6-4106-bf01-64fb899d6e24
+		summarizeBy: none
+		sourceColumn: OFFICE_COUNTRY
+
+		annotation SummarizationSetBy = Automatic
+
+	column OFFICE_LATITUDE
+		dataType: double
+		sourceProviderType: double
+		lineageTag: 0453aea6-f68e-477a-9c33-2cf45a9eeea9
+		dataCategory: Latitude
+		summarizeBy: none
+		sourceColumn: OFFICE_LATITUDE
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column OFFICE_LONGITUDE
+		dataType: double
+		sourceProviderType: double
+		lineageTag: 13787f1b-6c82-4d6e-b299-34870ecc7ca8
+		dataCategory: Longitude
+		summarizeBy: none
+		sourceColumn: OFFICE_LONGITUDE
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column YARD_LATITUDE
+		dataType: double
+		sourceProviderType: double
+		lineageTag: 65d34dc8-8199-4fec-977a-e2f4dd9c99c2
+		summarizeBy: none
+		sourceColumn: YARD_LATITUDE
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column YARD_LONGITUDE
+		dataType: double
+		sourceProviderType: double
+		lineageTag: b29932e2-51e2-4d91-ada5-c5400267b98a
+		summarizeBy: none
+		sourceColumn: YARD_LONGITUDE
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	hierarchy 'TERMINAL Hierarchy'
+		lineageTag: 2f09cd75-d703-4680-b4e0-4d95197950ee
+
+		level TERMINAL_REGION
+			lineageTag: f32905a7-db3e-494a-9059-0b400b8f5302
+			column: TERMINAL_REGION
+
+		level TERMINAL_COUNTRY
+			lineageTag: a2ede4db-6d4f-4f75-8a3b-2a29d3533ade
+			column: TERMINAL_COUNTRY
+
+		level TERMINAL_CITY
+			lineageTag: bcabca16-5bad-4c90-bb0d-4676aef609cb
+			column: TERMINAL_CITY
+
+		level TERMINAL_KEY
+			lineageTag: 53071cd6-fc80-474a-8da1-94f706f8d196
+			column: TERMINAL_KEY
+
+		level LOCATION_NAME
+			lineageTag: b4581bac-c9b4-4297-bc52-e5c42a4fe888
+			column: LOCATION_NAME
+
+	hierarchy 'COUNTRY/TERMINAL Hierarchy'
+		lineageTag: 322450d2-f7b5-4377-a05a-f16db5be0cf9
+
+		level TERMINAL_COUNTRY
+			lineageTag: 097a7134-eb2a-486f-b0ea-3c6fbb0f91f3
+			column: TERMINAL_COUNTRY
+
+		level TERMINAL_KEY
+			lineageTag: 54392c96-78d6-452d-a508-150833b1d458
+			column: TERMINAL_KEY
+
+	partition GOLD_TERMINALS = m
+		mode: import
+		source =
+				let
+				    Source = Snowflake.Databases("carrix.snowflakecomputing.com","PBI_WH",[Role="ANALYTICS_DEVELOPER"]),
+				    GOLD_Database = Source{[Name="GOLD",Kind="Database"]}[Data],
+				    REFERENCE_TABLES_Schema = GOLD_Database{[Name="REFERENCE_TABLES",Kind="Schema"]}[Data],
+				    GOLD_TERMINALS_Table = REFERENCE_TABLES_Schema{[Name="GOLD_TERMINALS",Kind="Table"]}[Data],
+				    #"Added Conditional Column" = Table.AddColumn(GOLD_TERMINALS_Table, "COLOR", each if [TERMINAL_KEY] = "B63" then "#3B83C5" else if [TERMINAL_KEY] = "BIJ" then "#F36D21" else if [TERMINAL_KEY] = "C60" then "#F59191" else if [TERMINAL_KEY] = "DRS" then "#E56664" else if [TERMINAL_KEY] = "MIT" then "#FFD602" else if [TERMINAL_KEY] = "OICT" then "#CEB48D" else if [TERMINAL_KEY] = "PA" then "#8DC27B" else if [TERMINAL_KEY] = "PCT" then "#AA4F9E" else if [TERMINAL_KEY] = "SMIT" then "#FEE876" else if [TERMINAL_KEY] = "T5S" then "#9295CA" else if [TERMINAL_KEY] = "T18" then "#8B8989" else if [TERMINAL_KEY] = "T30" then "#427693" else if [TERMINAL_KEY] = "TAM" then "#F89953" else if [TERMINAL_KEY] = "TPT" then "#9AC9EC" else if [TERMINAL_KEY] = "ZLO" then "#40AFA4" else null, type text)
+				in
+				    #"Added Conditional Column"
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navigation
+

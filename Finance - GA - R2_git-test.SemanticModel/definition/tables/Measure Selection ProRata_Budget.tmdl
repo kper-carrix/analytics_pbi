@@ -1,0 +1,72 @@
+table 'Measure Selection ProRata_Budget'
+	lineageTag: 154f5244-8004-47ea-ab50-dbdc5c92ef62
+
+	column 'Measure Selection'
+		dataType: string
+		isHidden
+		lineageTag: d55e8fa4-93c5-48ea-a6eb-f299348e0ff1
+		summarizeBy: none
+		sourceColumn: Measure Selection
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Index
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 7d3ad7c1-ad29-4a2b-90b7-3d87d35ea5ad
+		summarizeBy: sum
+		sourceColumn: Index
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Display name'
+		dataType: string
+		lineageTag: 25a2bf8d-2107-4559-8985-20901a4b0866
+		summarizeBy: none
+		sourceColumn: Display name
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Display %'
+		dataType: string
+		lineageTag: 810736ea-95d9-474e-aef8-4722fd29d493
+		summarizeBy: none
+		sourceColumn: Display %
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Translate
+		dataType: string
+		isHidden
+		lineageTag: 4ecfeea4-b35e-4278-800a-be0034d337f2
+		summarizeBy: none
+		sourceColumn: Translate
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Measure Selection ProRata_Budget' = m
+		mode: import
+		source =
+				let
+				    Source = Table.FromRows(Json.Document(Binary.Decompress(Binary.FromText("i45WCijK1w1KLElU0lEyBGIkrqoCEscxuaQ0MUcXLhKrE63kXpRfXAyUMwJiGFtVAcaC6FCKjQUA", BinaryEncoding.Base64), Compression.Deflate)), let _t = ((type nullable text) meta [Serialized.Text = true]) in type table [#"Measure Selection" = _t, Index = _t, #"Display name" = _t, #"Display %" = _t, Translate = _t]),
+				    #"Changed Type" = Table.TransformColumnTypes(Source,{{"Index", Int64.Type}})
+				in
+				    #"Changed Type"
+
+	changedProperty = IsHidden
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

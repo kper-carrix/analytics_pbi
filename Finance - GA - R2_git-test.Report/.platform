@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Report",
+    "displayName": "Finance - GA - R2_git-test"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "e9cdea8a-0855-a899-4604-cf304d37e270"
+  }
+}

@@ -1,0 +1,57 @@
+table 'VOLUME PARAMETER'
+	isHidden
+	lineageTag: 34ef02c0-f8e4-4e06-820d-6fda11b9126d
+
+	measure SelectedValue_Parameter = SELECTEDVALUE('VOLUME PARAMETER'[VOLUME PARAMETER])
+		isHidden
+		lineageTag: f48c6ba9-0f15-4b58-9e83-e768f209ddc6
+
+	column 'VOLUME PARAMETER'
+		isHidden
+		lineageTag: e5fb23e7-41ec-4640-9fc0-6d607ccce579
+		summarizeBy: none
+		sourceColumn: [Value1]
+		sortByColumn: 'VOLUME PARAMETER Order'
+
+		relatedColumnDetails
+			groupByColumn: 'VOLUME PARAMETER Fields'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'VOLUME PARAMETER Fields'
+		isHidden
+		lineageTag: 237ad50d-8991-404f-a13b-b0f0d97ca2e7
+		summarizeBy: none
+		sourceColumn: [Value2]
+		sortByColumn: 'VOLUME PARAMETER Order'
+
+		extendedProperty ParameterMetadata =
+				{
+				  "version": 3,
+				  "kind": 2
+				}
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'VOLUME PARAMETER Order'
+		isHidden
+		formatString: 0
+		lineageTag: 574b79ca-95ee-48c1-b218-b66b882bdca3
+		summarizeBy: sum
+		sourceColumn: [Value3]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'VOLUME PARAMETER' = calculated
+		mode: import
+		source =
+				{
+				    ("Auto", NAMEOF('GOLD_FINANCE_METRICS'[Volume Auto (Current)]), 0),
+				    ("CFS", NAMEOF('GOLD_FINANCE_METRICS'[Volume CFS (Current)]), 1),
+				    ("Container Moves", NAMEOF('GOLD_FINANCE_METRICS'[Volume Container Moves (Current)]), 2),
+				    ("Cruise Passenger", NAMEOF('GOLD_FINANCE_METRICS'[Volume Cruise Passenger (Current)]), 3),
+				    ("Rail Lifts", NAMEOF('GOLD_FINANCE_METRICS'[Volume Rail Lifts (Current)]), 4)
+				}
+
+	annotation PBI_Id = 601ce8dd3195411fa1ed328922476849
+

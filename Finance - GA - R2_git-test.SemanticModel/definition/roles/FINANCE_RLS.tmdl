@@ -1,0 +1,7 @@
+role FINANCE_RLS
+	modelPermission: read
+
+	tablePermission RLS_BY_EXECUTIVE_GROUP_HIERARCHY = [USER_PRINCIPAL_NAME] = USERPRINCIPALNAME()
+
+	annotation PBI_Id = ac627c770cac4139bf08c0ca77849b4c
+

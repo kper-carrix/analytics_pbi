@@ -1,0 +1,54 @@
+model Model
+	culture: en-US
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	discourageImplicitMeasures
+	sourceQueryCulture: en-US
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation PBI_QueryOrder = ["GOLD_FINANCE_METRICS","GOLD_TERMINALS","DIM_DATE","DIM_DATE (2)","Measure Selection Time Comparison","Measure Selection ProRata_Budget","RLS_BY_EXECUTIVE_GROUP_HIERARCHY","GOLD_FINANCE_TERMINALS_RLS"]
+
+annotation __PBI_TimeIntelligenceEnabled = 1
+
+annotation PBIDesktopVersion = 2.146.705.0 (25.08)+b71502aff0a01340c88f384884ef42771068f115
+
+annotation PBI_ProTooling = ["DaxQueryView_Desktop","WebModelingEdit","CalcGroup"]
+
+annotation __TEdtr = 1
+
+ref table GOLD_TERMINALS
+ref table 'FINANCE TERMINAL HIERARCHY'
+ref table DIM_DATE
+ref table 'DIM_DATE (2)'
+ref table 'Measure Selection Time Comparison'
+ref table GOLD_FINANCE_METRICS
+ref table 'Measure Selection ProRata_Budget'
+ref table _Measure
+ref table DateTableTemplate_33261e59-2550-4351-8c6e-359025711655
+ref table LocalDateTable_6a0c3061-63c5-460d-9487-8f9eb06c6164
+ref table LocalDateTable_7fae8859-b517-402d-a159-e200843122e9
+ref table LocalDateTable_331f2f97-8d84-4629-979e-82b511d86345
+ref table LocalDateTable_ecfb6839-dedd-4b19-b874-a8f401e0d89c
+ref table LocalDateTable_af5ecd02-8d34-4d34-a431-46f3471ba3ab
+ref table LocalDateTable_91bff17f-0a54-4aa6-913c-24eadd2e2443
+ref table LocalDateTable_bd379015-6422-4b25-9494-eb5100cb8764
+ref table LocalDateTable_657bc0ee-76dd-4a95-a848-0c378a3a1e08
+ref table LocalDateTable_624cc17c-f93c-46d3-a4a3-6c73829b1ba8
+ref table LocalDateTable_0ff3855c-4724-4d83-8b54-db79c1ad6cfa
+ref table LocalDateTable_849b7a88-147b-487d-bdc9-89a3399aded5
+ref table LocalDateTable_62dda2ff-87e8-48d6-8762-1026e3d34826
+ref table LocalDateTable_b14035bc-9166-4431-819a-e54dec2ea2f2
+ref table LocalDateTable_7612dcaa-2100-4a48-9de7-466fa24f8437
+ref table LocalDateTable_4224f213-0a79-4262-8202-4a556faec98b
+ref table LocalDateTable_48f83276-d4be-4dc3-b27a-7da7fb004ecc
+ref table LocalDateTable_f79a467e-8f70-4468-915e-8d38aaec4010
+ref table LocalDateTable_617071d0-8911-482b-98f3-688913144df7
+ref table RLS_BY_EXECUTIVE_GROUP_HIERARCHY
+ref table GOLD_FINANCE_TERMINALS_RLS
+ref table 'VOLUME PARAMETER'
+
+ref role FINANCE_RLS
+
+ref cultureInfo en-US
+

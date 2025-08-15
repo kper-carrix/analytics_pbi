@@ -1,0 +1,115 @@
+relationship a16c86d4-f319-fa5f-6bcf-da9484546ee7
+	isActive: false
+	crossFilteringBehavior: bothDirections
+	fromCardinality: one
+	fromColumn: 'DIM_DATE (2)'.DATE_ACTUAL
+	toColumn: DIM_DATE.DATE_ACTUAL
+
+relationship 80489c83-5c49-380e-8227-5723dbc382c1
+	fromColumn: GOLD_FINANCE_METRICS.CALENDAR_MONTH
+	toColumn: DIM_DATE.DATE_ACTUAL
+
+relationship 6dbaaf17-db8a-331f-4c90-17a22968acf4
+	fromColumn: GOLD_FINANCE_METRICS.TERMINAL_KEY
+	toColumn: GOLD_TERMINALS.TERMINAL_KEY
+
+relationship f2dc7902-fbb2-4341-8311-6f1e4fb4e3b6
+	joinOnDateBehavior: datePartOnly
+	fromColumn: DIM_DATE.DATE_ACTUAL
+	toColumn: LocalDateTable_6a0c3061-63c5-460d-9487-8f9eb06c6164.Date
+
+relationship fb190b09-a477-4f7f-bac2-806e85492d67
+	joinOnDateBehavior: datePartOnly
+	fromColumn: DIM_DATE.WEEK_START_DATE
+	toColumn: LocalDateTable_7fae8859-b517-402d-a159-e200843122e9.Date
+
+relationship 1580ea9d-34e9-455f-ab0f-21f91a8481a5
+	joinOnDateBehavior: datePartOnly
+	fromColumn: DIM_DATE.WEEK_END_DATE
+	toColumn: LocalDateTable_331f2f97-8d84-4629-979e-82b511d86345.Date
+
+relationship 9832728a-5e1f-4503-b1e0-ed0da7a9aa94
+	joinOnDateBehavior: datePartOnly
+	fromColumn: DIM_DATE.MONTH_START_DATE
+	toColumn: LocalDateTable_ecfb6839-dedd-4b19-b874-a8f401e0d89c.Date
+
+relationship 256bee9c-6866-4c5f-9d3f-1213a88b78d8
+	joinOnDateBehavior: datePartOnly
+	fromColumn: DIM_DATE.MONTH_END_DATE
+	toColumn: LocalDateTable_af5ecd02-8d34-4d34-a431-46f3471ba3ab.Date
+
+relationship c373c13c-3e14-4439-abe6-c60570868ab0
+	joinOnDateBehavior: datePartOnly
+	fromColumn: DIM_DATE.QUARTER_START_DATE
+	toColumn: LocalDateTable_91bff17f-0a54-4aa6-913c-24eadd2e2443.Date
+
+relationship d471094f-5865-4bcd-b3e4-46f9103887f0
+	joinOnDateBehavior: datePartOnly
+	fromColumn: DIM_DATE.QUARTER_END_DATE
+	toColumn: LocalDateTable_bd379015-6422-4b25-9494-eb5100cb8764.Date
+
+relationship fe608d5f-af21-456a-b69e-b1374a3ca375
+	joinOnDateBehavior: datePartOnly
+	fromColumn: DIM_DATE.YEAR_START_DATE
+	toColumn: LocalDateTable_657bc0ee-76dd-4a95-a848-0c378a3a1e08.Date
+
+relationship 7e5dcb92-a6f0-447a-a1f4-d7e8c8ef82ca
+	joinOnDateBehavior: datePartOnly
+	fromColumn: DIM_DATE.YEAR_END_DATE
+	toColumn: LocalDateTable_624cc17c-f93c-46d3-a4a3-6c73829b1ba8.Date
+
+relationship c5b23370-e608-473b-9c13-5573e039e0a6
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'DIM_DATE (2)'.WEEK_START_DATE
+	toColumn: LocalDateTable_0ff3855c-4724-4d83-8b54-db79c1ad6cfa.Date
+
+relationship 4f09ab03-551b-455e-9489-6d75c609cd98
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'DIM_DATE (2)'.WEEK_END_DATE
+	toColumn: LocalDateTable_849b7a88-147b-487d-bdc9-89a3399aded5.Date
+
+relationship d2549f67-9cfd-4d46-9192-010262d8f835
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'DIM_DATE (2)'.MONTH_START_DATE
+	toColumn: LocalDateTable_62dda2ff-87e8-48d6-8762-1026e3d34826.Date
+
+relationship 2b8045cd-dccd-4233-a17d-3683c311ae93
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'DIM_DATE (2)'.MONTH_END_DATE
+	toColumn: LocalDateTable_b14035bc-9166-4431-819a-e54dec2ea2f2.Date
+
+relationship 15f3c3d3-0c5d-49ce-b7df-45141283d105
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'DIM_DATE (2)'.QUARTER_START_DATE
+	toColumn: LocalDateTable_7612dcaa-2100-4a48-9de7-466fa24f8437.Date
+
+relationship 5271e7cb-7f28-4de7-a470-6f90407b4fc3
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'DIM_DATE (2)'.QUARTER_END_DATE
+	toColumn: LocalDateTable_4224f213-0a79-4262-8202-4a556faec98b.Date
+
+relationship 0e81d1d3-c6e7-4d46-b5c7-895ab303d6f2
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'DIM_DATE (2)'.YEAR_START_DATE
+	toColumn: LocalDateTable_48f83276-d4be-4dc3-b27a-7da7fb004ecc.Date
+
+relationship 98afa26d-c18d-4dcd-8e65-c18c6c5395f9
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'DIM_DATE (2)'.YEAR_END_DATE
+	toColumn: LocalDateTable_f79a467e-8f70-4468-915e-8d38aaec4010.Date
+
+relationship a5dd0be5-c363-4225-952b-12819b100bc3
+	joinOnDateBehavior: datePartOnly
+	fromColumn: GOLD_FINANCE_METRICS.FISCAL_MONTH
+	toColumn: LocalDateTable_617071d0-8911-482b-98f3-688913144df7.Date
+
+relationship AutoDetected_af09d879-3fa5-401f-b31b-634a44d95d3f
+	crossFilteringBehavior: bothDirections
+	securityFilteringBehavior: bothDirections
+	fromColumn: RLS_BY_EXECUTIVE_GROUP_HIERARCHY.EXECUTIVE_GROUP_HIERARCHY
+	toColumn: GOLD_FINANCE_TERMINALS_RLS.EXECUTIVE_GROUP_HIERARCHY
+
+relationship 76c466f8-b4e7-2277-59bf-8ea286fbb838
+	fromColumn: GOLD_FINANCE_METRICS.EXECUTIVE_GROUP_HIERARCHY
+	toColumn: GOLD_FINANCE_TERMINALS_RLS.EXECUTIVE_GROUP_HIERARCHY
+

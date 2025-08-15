@@ -1,0 +1,88 @@
+table RLS_BY_EXECUTIVE_GROUP_HIERARCHY
+	isHidden
+	lineageTag: b30d548d-dd1e-4507-9706-1c24c6f5d000
+
+	column EXECUTIVE_GROUP_HIERARCHY_USER_KEY
+		dataType: string
+		isHidden
+		lineageTag: 3244a873-0763-4456-98fd-556130c3172a
+		summarizeBy: none
+		sourceColumn: EXECUTIVE_GROUP_HIERARCHY_USER_KEY
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column EXECUTIVE_GROUP_HIERARCHY
+		dataType: string
+		isHidden
+		lineageTag: e75bafe6-b096-486e-8a81-7e253730890d
+		summarizeBy: none
+		sourceColumn: EXECUTIVE_GROUP_HIERARCHY
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column USER_ID
+		dataType: string
+		isHidden
+		lineageTag: 37a8c23a-73cf-4086-b8c5-ebc3e3c62856
+		summarizeBy: none
+		sourceColumn: USER_ID
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column USER_PRINCIPAL_NAME
+		dataType: string
+		isHidden
+		lineageTag: 1c3a075d-842f-4687-b273-693aabcd343b
+		summarizeBy: none
+		sourceColumn: USER_PRINCIPAL_NAME
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column USER_DISPLAY_NAME
+		dataType: string
+		isHidden
+		lineageTag: 00b3fa00-e018-469d-8bd5-d557d72b0ca9
+		summarizeBy: none
+		sourceColumn: USER_DISPLAY_NAME
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column GROUPS_PROVIDING_ACCESS
+		dataType: string
+		isHidden
+		lineageTag: 26d12edf-3c0b-4e85-a093-9604c0260e0a
+		summarizeBy: none
+		sourceColumn: GROUPS_PROVIDING_ACCESS
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition RLS_BY_EXECUTIVE_GROUP_HIERARCHY = m
+		mode: import
+		source =
+				let
+				    Source = Snowflake.Databases("carrix.snowflakecomputing.com","PBI_WH",[Role="ANALYTICS_DEVELOPER"]),
+				    GOLD_Database = Source{[Name="GOLD",Kind="Database"]}[Data],
+				    REFERENCE_TABLES_Schema = GOLD_Database{[Name="REFERENCE_TABLES",Kind="Schema"]}[Data],
+				    POWER_BI_RLS_BY_EXECUTIVE_GROUP_HIERARCHY_Table = REFERENCE_TABLES_Schema{[Name="POWER_BI_RLS_BY_EXECUTIVE_GROUP_HIERARCHY",Kind="Table"]}[Data],
+				    #"Expanded GROUPS_PROVIDING_ACCESS" = Table.ExpandListColumn(POWER_BI_RLS_BY_EXECUTIVE_GROUP_HIERARCHY_Table, "GROUPS_PROVIDING_ACCESS")
+				in
+				    #"Expanded GROUPS_PROVIDING_ACCESS"
+
+	changedProperty = IsHidden
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

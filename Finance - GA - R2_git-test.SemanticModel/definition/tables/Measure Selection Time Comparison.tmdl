@@ -1,0 +1,104 @@
+table 'Measure Selection Time Comparison'
+	lineageTag: 88e6f0bb-a3c5-4f51-9a7e-10e298e2c7f2
+
+	measure 'Backgroud hide' = IF(SELECTEDVALUE('Measure Selection Time Comparison'[Index])=4,"#FFFFFF","#FFFFFF00")
+		lineageTag: c647f568-07f9-4952-ad14-59cd9501ce7e
+
+		changedProperty = IsHidden
+
+	measure 'Values show' = IF(SELECTEDVALUE('Measure Selection Time Comparison'[Index])=4,"#000000","#FFFFFF00")
+		lineageTag: c9c16db7-f03d-431c-8633-f0294013d757
+
+		changedProperty = IsHidden
+
+	measure 'Values show (gray)' = IF(SELECTEDVALUE('Measure Selection Time Comparison'[Index])=4,"#808080","#FFFFFF00")
+		lineageTag: cf87cd22-6779-4bd4-a130-5eb0a6e0e5c4
+
+		changedProperty = IsHidden
+
+	measure Hide = IF(SELECTEDVALUE('Measure Selection Time Comparison'[Index]) in {1,2,4},1,0)
+		formatString: 0
+		lineageTag: 1af88c3d-09b8-40dd-99df-f4ad3429911e
+
+		changedProperty = IsHidden
+
+	measure 'Button Backgroud' = SELECTEDVALUE('Measure Selection Time Comparison'[Index])
+		formatString: 0
+		lineageTag: c339ebad-a02e-4d79-b954-9d0dcdb0875a
+
+		changedProperty = IsHidden
+
+	measure 'Measure selected' = SELECTEDVALUE('Measure Selection Time Comparison'[Measure Selection])
+		lineageTag: 1aaee3c7-a61d-4cf3-86d5-17945da9bdf1
+
+		changedProperty = IsHidden
+
+	column 'Measure Selection'
+		dataType: string
+		lineageTag: 10ba183d-a20e-42d8-8491-814d94a36c40
+		summarizeBy: none
+		sourceColumn: Measure Selection
+		sortByColumn: Index
+
+		changedProperty = SortByColumn
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Index
+		dataType: int64
+		formatString: 0
+		lineageTag: a8e56b9d-3d46-4f59-9c5d-ebc60eee2732
+		summarizeBy: sum
+		sourceColumn: Index
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Display name'
+		dataType: string
+		lineageTag: 00ee995d-a3ba-4be5-8db9-eb854055c7ea
+		summarizeBy: none
+		sourceColumn: Display name
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Display %'
+		dataType: string
+		lineageTag: fca1b986-8425-4b17-96c8-8f2ddc45af22
+		summarizeBy: none
+		sourceColumn: Display %
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Color
+		dataType: string
+		lineageTag: edf055f3-90f5-4109-abd6-4b4abf3fe064
+		summarizeBy: none
+		sourceColumn: Color
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Measure Selection Time Comparison' = m
+		mode: import
+		source =
+				let
+				    Source = Table.FromRows(Json.Document(Binary.Decompress(Binary.FromText("i45WCijKzC9SiExNLFLSUTIEYoSAgkZApCZQRFUBRVGMkrIbGMQoKcXqwEzwzc8ryQDKGsGNAIsAzfBFNgOmDN0Q59LikvxcoIQxEDvn5xYkFmUW5+eBdaJw0TWCHVqSr+CSWJIKlDZB9UFkiAvYCJiqFIgquCEGBlBjnEpT0lNLgFKmQAznqCrAmUqxsQA=", BinaryEncoding.Base64), Compression.Deflate)), let _t = ((type nullable text) meta [Serialized.Text = true]) in type table [#"Measure Selection" = _t, Index = _t, #"Display name" = _t, #"Display %" = _t, Color = _t]),
+				    #"Changed Type" = Table.TransformColumnTypes(Source,{{"Index", Int64.Type}})
+				in
+				    #"Changed Type"
+
+	changedProperty = IsHidden
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navigation
+

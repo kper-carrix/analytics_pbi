@@ -1,0 +1,48 @@
+table 'FINANCE TERMINAL HIERARCHY'
+	lineageTag: 1806d03b-4cb9-47b4-aa63-877944b0b06e
+
+	column Parameter
+		lineageTag: 39114c66-05f8-4904-a793-c4c9b298f979
+		summarizeBy: none
+		sourceColumn: [Value1]
+		sortByColumn: 'Parameter Order'
+
+		relatedColumnDetails
+			groupByColumn: 'Parameter Fields'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Parameter Fields'
+		lineageTag: 082a900d-5d8f-42dc-b7d5-df193bdb2f56
+		summarizeBy: none
+		sourceColumn: [Value2]
+		sortByColumn: 'Parameter Order'
+
+		extendedProperty ParameterMetadata =
+				{
+				  "version": 3,
+				  "kind": 2
+				}
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Parameter Order'
+		formatString: 0
+		lineageTag: a6a7ab80-ec92-4f29-9756-74c6890fed67
+		summarizeBy: sum
+		sourceColumn: [Value3]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'FINANCE TERMINAL HIERARCHY' = calculated
+		mode: import
+		source =
+				{
+				    ("Executive Group", NAMEOF('GOLD_FINANCE_METRICS'[EXECUTIVE_GROUP]), 0),
+				    ("Executive Subgroup", NAMEOF('GOLD_FINANCE_METRICS'[EXECUTIVE_SUB_GROUP]), 1),
+				    ("Executive Level Three", NAMEOF('GOLD_FINANCE_METRICS'[EXECUTIVE_LEVEL_THREE]), 2),
+				    ("BOD 3", NAMEOF('GOLD_FINANCE_METRICS'[BOD_3]), 3)
+				}
+
+	annotation PBI_Id = 84e944d17b234f31bca3bb287ffe10b7
+

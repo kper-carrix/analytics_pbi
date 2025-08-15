@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "SemanticModel",
+    "displayName": "Finance - GA - R2_git-test"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "fea2b2b2-39e8-bd89-4051-0facf6ed5219"
+  }
+}
