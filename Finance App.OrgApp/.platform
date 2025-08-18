@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "OrgApp",
+    "displayName": "Finance App"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "3793b098-b656-83f6-42eb-fcbd848c8693"
+  }
+}

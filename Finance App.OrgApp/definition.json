@@ -1,0 +1,20 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/orgapp/definition/orgAppDefinition/1.0.0/schema.json",
+  "settings": {},
+  "elements": [
+    {
+      "elementType": "item",
+      "elementId": "88f46b79-062a-4519-af32-2c6e5ef0a444",
+      "itemType": "Report",
+      "itemLogicalId": "e9cdea8a-0855-a899-4604-cf304d37e270",
+      "displayName": "Finance - GA - R2_git-test"
+    },
+    {
+      "elementType": "item",
+      "elementId": "c05eca02-d04f-4c60-91fd-034908f76e8a",
+      "itemType": "SemanticModel",
+      "itemLogicalId": "fea2b2b2-39e8-bd89-4051-0facf6ed5219",
+      "displayName": "88f46b79-062a-4519-af32-2c6e5ef0a444"
+    }
+  ]
+}
